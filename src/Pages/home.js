@@ -6,7 +6,7 @@ import { LinkedIn, Instagram, GitHub } from "@mui/icons-material";
 import Footer from '../Pages/footer.js';
 import NavBar from "./Navbar.js";
 import '../css/Home.css';
-import '../css/swiper-bundle.min.css';
+
 import '../css/cards.css';
 import iedclogo from '../img/iedclogo.png';
 
@@ -703,7 +703,7 @@ function Home() {
             </div>
             <div class="face face2">
             <div class="content">
-                <p>Fete-A Real-time video call webapp .fete powered by IEDC SNMIMT , Real-time Simple Secure Fast video calls,chat and speed.</p>
+                <p>"Fete: Real-time Video Calls & Chat, Powered by IEDC SNMIMT. Simple, Secure, Fast."</p>
                     <a href="https://fete.onrender.com">Check It</a>
             </div>
         </div>
@@ -717,8 +717,8 @@ function Home() {
             </div>
             <div class="face face2">
             <div class="content">
-                <p>OUR APP IS BUILT ON A STATE OF THE ART SYATICAL MODEL CALLED STABLE DIFFUSTION.BY USING OUR APP,YOU BE ABLE TO ACEESS REAL-TIME DATA AND ANALYZE IT USING THE POWER OF STABLE DIFFUSTION</p>
-                    <a href="https://fete.onrender.com">Check It</a>
+                <p>"Our app harnesses the power of Stable Diffusion, providing real-time data access and analysis for users."</p>
+                    <a href="#">Check It</a>
             </div>
         </div>
           </div>
@@ -732,8 +732,8 @@ function Home() {
             </div>
             <div class="face face2">
             <div class="content">
-                <p>GROOVY MEDIA PLAYER IS AN ANDROID APP THATS ALLOWS USERS TO PLAY VARIOUS AUDIO AND VIDEO FILES ON THIER MOBILE PHONE,AND MANY FEATURES ARE INBUILT.</p>
-                    <a href="https://fete.onrender.com">Check It</a>
+                <p>"Groovy Media Player: Your All-in-One Android App for Playing Audio and Video Files on Mobile."</p>
+                    <a href="#">Check It</a>
             </div>
         </div>
           </div>

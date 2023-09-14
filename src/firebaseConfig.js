@@ -3,6 +3,7 @@ import "firebase/compat/database"; // Import Firebase Realtime Database
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import 'firebase/compat/storage'; // Import Firebase Storage
+import 'firebase/compat/analytics';
 
 
 
@@ -24,7 +25,7 @@ const app = firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 
 
-
+const analytics = firebase.analytics();
 
 
 
@@ -35,4 +36,4 @@ const firestore = firebase.firestore();
 
 export const auth = app.auth();
 export const db = firebaseApp.database();
-export { firestore, storage };
+export { firestore, storage,analytics };

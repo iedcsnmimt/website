@@ -88,7 +88,7 @@ function StudentSignupPage() {
 
    // Show a success message and redirect
    alert("Account created successfully!");
-   navigate('/login/student/1'); // Redirect to the login page
+   navigate('/login/studentSignIn/1/'); // Redirect to the login page
  } catch (error) {
    console.error("Error creating user account:", error.message);
    alert("Error creating user account. Please try again.");

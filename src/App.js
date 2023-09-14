@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes,Navigate} from 'react-router-dom';
-import { auth,firestore } from './firebaseConfig';
+import { auth,firestore ,analytics} from './firebaseConfig';
 import Staffsignuppage from './Pages/StaffSiginUp';
 import StudentSignupPage from './Pages/StudentSignUp';
 import StaffLogin from './Pages/StaffSignIn';
@@ -9,9 +9,34 @@ import StudentDashboard from './Pages/StudentDashboard';
 import StaffDashboard from './Pages/StaffDashboard';
 import Login from './Pages/Login';
 import Home from './Pages/home';
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
+  useEffect(() => {
+    // Create a script element
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TWWMQ2QTNM';
+
+    // Append the script to the document's head
+    document.head.appendChild(script);
+
+    // Define the gtag function
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      window.dataLayer.push(arguments);
+    }
+
+    // Initialize gtag and configure it
+    gtag('js', new Date());
+    gtag('config', 'G-TWWMQ2QTNM');
+
+    // Clean up by removing the script element when the component unmounts
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
 // Use Firebase Authentication to check if a user is authenticated
 useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged((user) => {

@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import backgroungIMG from './Background.png';
+import backgroungIMG from '../img/starting.webp';
 import { useNavigate } from 'react-router-dom';
 import '../css/Login.css';
 

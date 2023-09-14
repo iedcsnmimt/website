@@ -45,10 +45,10 @@ function Navbar() {
         </ul>
       </div>
 
-      {/* Toggle button as a Link to /login 
+      {/* Toggle button as a Link to /login */}
       <Link to="/login">
         Login
-      </Link>*/}
+      </Link>
     </nav>
   );
 }
