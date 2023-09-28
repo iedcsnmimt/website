@@ -232,6 +232,8 @@ function Home() {
           <a href="" className="work__img">
             <img src={require("../img/EXCOM2023-24/7.png")} alt="" />
           </a>
+          
+         
           <a href="" className="work__img">
             <img src={require("../img/EXCOM2023-24/8.png")} alt="" />
           </a>

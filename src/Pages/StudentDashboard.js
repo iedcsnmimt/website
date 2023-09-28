@@ -23,7 +23,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
 
   // Define state variables for editable fields
   const [editedData, setEditedData] = useState({
-    email: '',
+    gmail: '',
     phone: '',
     password: '',
     fatherphnumber: '',
@@ -31,16 +31,6 @@ const [activeTab, setActiveTab] = useState('personalInfo');
     year: '',
     posts: '', // Add the 'posts' field
   });
-
-
-
-
-
-
-
-
-
-
   
   const handleLogout = async () => {
     try {
@@ -55,7 +45,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
     // Toggle edit mode and initialize edited data with the current user data
     setEditMode(!editMode); 
     setEditedData({
-      email: userData.email,
+      gmail: userData.gmail,
       phone: userData.phone,
       password: '',
       fatherphnumber: userData.fatherphnumber,
@@ -71,7 +61,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
       const user = auth.currentUser;
       if (user) {
         await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).update({
-          email: editedData.email,
+          gmail: editedData.gmail,
           phone: editedData.phone,
           fatherphnumber: editedData.fatherphnumber,
           motherphnumber: editedData.motherphnumber,
@@ -340,10 +330,10 @@ const [activeTab, setActiveTab] = useState('personalInfo');
               <form>
              
   <TextField
-    label="Email"
+    label="Gmail"
     type="email"
-    value={editedData.email}
-    onChange={(e) => setEditedData({ ...editedData, email: e.target.value })}
+    value={editedData.gmail}
+    onChange={(e) => setEditedData({ ...editedData, gmail: e.target.value })}
   />
   <TextField
     label="Phone Number"
@@ -371,7 +361,8 @@ const [activeTab, setActiveTab] = useState('personalInfo');
                     <TableCell>Name</TableCell>
                     <TableCell>Year</TableCell>
                     <TableCell>Branch</TableCell>
-                    <TableCell>E-Mail ID</TableCell>
+                    <TableCell>IEDC Mail ID</TableCell>
+                    <TableCell>G-Mail ID</TableCell>
                     <TableCell>Phone Number</TableCell>
                     <TableCell>Blood Group</TableCell>
                     <TableCell>Father Name</TableCell>
@@ -399,6 +390,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
                     <TableCell>{userData.year}</TableCell>
                     <TableCell>{userData.Branch}</TableCell>
                     <TableCell>{userData.email}</TableCell>
+                    <TableCell>{userData.gmail}</TableCell>
                     <TableCell>{userData.phone}</TableCell>
                     <TableCell>{userData.bloodgroup}</TableCell>
                     <TableCell>{userData.fathername}</TableCell>
