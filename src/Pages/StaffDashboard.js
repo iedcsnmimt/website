@@ -30,9 +30,6 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import * as XLSX from 'xlsx';
 
 import { firestore, auth ,storage} from '../firebaseConfig';
 import PropTypes from 'prop-types';
@@ -445,6 +442,7 @@ const handleTabChange = (event, newValue) => {
             <TableCell>Year</TableCell>
             <TableCell>Branch</TableCell>
             <TableCell>E-Mail ID</TableCell>
+            <TableCell>Gmail ID</TableCell>
             <TableCell>Phone Number</TableCell>
             <TableCell>Blood Group</TableCell>
             <TableCell>Father Name</TableCell>
@@ -460,8 +458,11 @@ const handleTabChange = (event, newValue) => {
             <TableCell>Year of Joining</TableCell>
             <TableCell>Year of Joining IEDC</TableCell>
             <TableCell>Skills</TableCell>
+            <TableCell>Online Payment</TableCell>
             <TableCell>IEDC Posts</TableCell>
             <TableCell>Assigned Post</TableCell>
+           
+            
           </TableRow>
         </TableHead>
         <TableBody>
@@ -472,6 +473,7 @@ const handleTabChange = (event, newValue) => {
               <TableCell>{student.year}</TableCell>
               <TableCell>{student.Branch}</TableCell>
               <TableCell>{student.email}</TableCell>
+              <TableCell>{student.gmail}</TableCell>
               <TableCell>{student.phone}</TableCell>
               <TableCell>{student.bloodgroup}</TableCell>
               <TableCell>{student.fathername}</TableCell>
@@ -487,7 +489,9 @@ const handleTabChange = (event, newValue) => {
               <TableCell>{student.yearofjoining}</TableCell>
               <TableCell>{student.iedcjoiningdate}</TableCell>
               <TableCell>{student.skills}</TableCell>
+              <TableCell>{student.cashOnHand ? 'No' : 'Yes'}</TableCell>
               <TableCell>{student.posts}</TableCell>
+             
               <TableCell>
                 <FormControl>
                   <InputLabel>Assign Post</InputLabel>
@@ -498,6 +502,7 @@ const handleTabChange = (event, newValue) => {
                     }
                   >
                     <MenuItem value="">None</MenuItem>
+                    <MenuItem value="NotMember">Not Verify</MenuItem>
                     <MenuItem value="Member">Member</MenuItem>
                     <MenuItem value="CEO">CEO</MenuItem>
                     <MenuItem value="CTO">CTO</MenuItem>
@@ -514,6 +519,7 @@ const handleTabChange = (event, newValue) => {
                     <MenuItem value="IPR AND RESEARCH OFFICER">IPR AND RESEARCH OFFICER</MenuItem>
                   </Select>
                 </FormControl>
+                
               </TableCell>
             </TableRow>
           ))}

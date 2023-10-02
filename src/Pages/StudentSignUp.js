@@ -328,7 +328,7 @@ function StudentSignupPage() {
                 <label for="guardianphnumber">
                 </label>
                 <input type="tel" name="guardianphnumber" id="guardianphnumber" required />
-                <span>GuardianPhone Number</span>
+                <span>Guardian Phone Number</span>
                 <div class="error"></div>
               </div>
 
@@ -339,8 +339,8 @@ function StudentSignupPage() {
                 <select name="hostel" id="hostel" required>
 
                   <option value="">Select Any one of it</option>
-                  <option value="hostel">Yes Iam in Hostel</option>
-                  <option value="notinhostel">No iam not in hostel</option>
+                  <option value="hostel">Yes I am in Hostel</option>
+                  <option value="notinhostel">No I am not in hostel</option>
 
 
 
@@ -488,6 +488,8 @@ function StudentSignupPage() {
                     <li>New Members: Rs. 50</li>
                     <li>Renewal: Rs. 30</li>
                     <li>"For third-year students who are not yet IEDC members and wish to join, there will be an additional fine of Rs. 100."</li>
+                    <li>"Fourth Years Only Renewal Is Permitted."</li>
+
 
                   </ul>
                 </div>
