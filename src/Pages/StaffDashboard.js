@@ -83,6 +83,7 @@ function StaffDashboard() {
   const [eventDesc, setEventDesc] = useState('');
   const [registrationLink, setRegistrationLink] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
+  const [totalStudents, setTotalStudents] = useState(0);
   // State to manage the editing of an event
   const [editingEvent, setEditingEvent] = useState(null);
   // State to store the edited event details
@@ -155,7 +156,10 @@ function StaffDashboard() {
             studentList.push(student);
           });
           setStudents(studentList);
+          // Set the total count of students
+        setTotalStudents(studentList.length);
         })
+        
         .catch((error) => {
           console.log('Error getting student list:', error);
         });
@@ -313,7 +317,7 @@ const handleTabChange = (event, newValue) => {
             <Typography>Branch: {staffData.Branch}</Typography>
             <Typography>Phone: {staffData.phone}</Typography>
             <Typography>KTU ID: {staffData.KTUid}</Typography>
-
+            <Typography>Total Students: {totalStudents}</Typography>
       {/* Tabs for different sections */}
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="User Info" />

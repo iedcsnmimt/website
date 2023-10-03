@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, firestore ,storage} from '../firebaseConfig';
+import { auth, firestore, storage } from '../firebaseConfig';
 // MATERIAL UI
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { TableCell,Table,TableBody,TableRow,TableHead ,Typography} from '@mui/material';
+import { TableCell, Table, TableBody, TableRow, TableHead, Typography } from '@mui/material';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 import '../css/studentdashboard.css';
 function StudentDashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-// Define state variables for tab management
-const [activeTab, setActiveTab] = useState('personalInfo');
+  // Define state variables for tab management
+  const [activeTab, setActiveTab] = useState('personalInfo');
   const [activityPoints, setActivityPoints] = useState('');
   const [studentList, setStudentList] = useState([]); // To store the list of all students
   const [selectedStudentUid, setSelectedStudentUid] = useState('');
@@ -31,7 +31,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
     year: '',
     posts: '', // Add the 'posts' field
   });
-  
+
   const handleLogout = async () => {
     try {
       await auth.signOut();
@@ -43,7 +43,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
 
   const handleEdit = () => {
     // Toggle edit mode and initialize edited data with the current user data
-    setEditMode(!editMode); 
+    setEditMode(!editMode);
     setEditedData({
       gmail: userData.gmail,
       phone: userData.phone,
@@ -114,7 +114,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
       }
     };
 
-    
+
 
     fetchStudentList();
   }, []);
@@ -128,7 +128,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
       setShowUploadButton(false);
     }
   }, [userData]);
-  
+
 
   const handleUpdateActivityPoints = async () => {
     try {
@@ -138,15 +138,15 @@ const [activeTab, setActiveTab] = useState('personalInfo');
         await firestore.collection('SNMIMT/USERS/STUDENTS').doc(selectedStudentUid).update({
           activityPoints: activityPoints,
         });
-  
+
         // Notify staff about the update
         const notificationMessage = `Activity Points updated by CEO (${user.displayName}): ${activityPoints}`;
-        
+
         // Query the staff members with designation 'NODAL OFFICER'
         const staffSnapshot = await firestore.collection('SNMIMT/USERS/STAFFS')
           .where('designation', '==', 'NODAL OFFICER')
           .get();
-        
+
         // Send the notification to each staff member
         staffSnapshot.forEach(async (staffDoc) => {
           await firestore.collection('notifications').add({
@@ -155,7 +155,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
             recipientId: staffDoc.id, // Include staff member's ID as a recipient
           });
         });
-  
+
         // Reset the activity points and selected student
         setActivityPoints('');
         setSelectedStudentUid('');
@@ -164,7 +164,7 @@ const [activeTab, setActiveTab] = useState('personalInfo');
       console.error(error);
     }
   };
-  
+
 
   const handleFileChange = (e) => {
     // Update the posterFile state with the selected file
@@ -274,18 +274,18 @@ const [activeTab, setActiveTab] = useState('personalInfo');
   return (
     <div className="dashboard-container">
       <h1>Welcome Back, {`${userData?.firstname || 'Student'} ${userData?.lastname || ''}`}
-</h1>
+      </h1>
       <h2>Helloo..., {userData?.posts || 'students'}</h2>
-      
+
       <div className="activity-point">
-    
+
         <Typography variant="h2">
           My IEDC Activity Points ⚡: {userData?.activityPoints}
         </Typography>
-       
-      
-    </div>
-     
+
+
+      </div>
+
       <div className="button-container">
         <Button
           variant="contained"
@@ -306,14 +306,14 @@ const [activeTab, setActiveTab] = useState('personalInfo');
             Personal Information
           </div>
           <div
-  className={`tab ${activeTab === 'uploadPoster' ? 'active' : ''}`}
-  onClick={() => handleTabClick('uploadPoster')}
->
-  Upload Poster
-  <span className="beta-label">Beta</span>
-</div>
+            className={`tab ${activeTab === 'uploadPoster' ? 'active' : ''}`}
+            onClick={() => handleTabClick('uploadPoster')}
+          >
+            Upload Poster
+            <span className="beta-label">Beta</span>
+          </div>
 
-         
+
         </div>
         <div className="tab-content">
           {activeTab === 'personalInfo' && (
@@ -322,117 +322,117 @@ const [activeTab, setActiveTab] = useState('personalInfo');
               {/* ... */}
 
               {userData && (
-          <div className="user-info">
-            <h2>Personal Information</h2>
-           
+                <div className="user-info">
+                  <h2>Personal Information</h2>
 
-            {editMode ? (
-              <form>
-             
-  <TextField
-    label="Gmail"
-    type="email"
-    value={editedData.gmail}
-    onChange={(e) => setEditedData({ ...editedData, gmail: e.target.value })}
-  />
-  <TextField
-    label="Phone Number"
-    type="tel"
-    value={editedData.phone}
-    onChange={(e) => setEditedData({ ...editedData, phone: e.target.value })}
-  />
-  <TextField
-    label="Change Password"
-    type="Password"
-    value={editedData.password}
-    onChange={(e) => setEditedData({ ...editedData, password: e.target.value })}
-  />
-  {/* Repeat this pattern for other form fields */}
- 
 
-              </form>
-            ) : (
-              <div className="table-container">
-              <Table className="custom-table">
-              
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Username</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Year</TableCell>
-                    <TableCell>Branch</TableCell>
-                    <TableCell>IEDC Mail ID</TableCell>
-                    <TableCell>G-Mail ID</TableCell>
-                    <TableCell>Phone Number</TableCell>
-                    <TableCell>Blood Group</TableCell>
-                    <TableCell>Father Name</TableCell>
-                    <TableCell>Father Phone Number</TableCell>
-                    <TableCell>Mother Name</TableCell>
-                    <TableCell>Mother Phone Number</TableCell>
-                    <TableCell>Guardian Name</TableCell>
-                    <TableCell>Guardian Phone Number</TableCell>
-                    <TableCell>Hostel</TableCell>
-                    <TableCell>Residential Address</TableCell>
-                    <TableCell>KtUid</TableCell>
-                    <TableCell>Area of Interest</TableCell>
-                    <TableCell>Year of Joining</TableCell>
-                    <TableCell>Year of Joining IEDC</TableCell>
-                    <TableCell>Skills</TableCell>
-                    <TableCell>Password</TableCell>
-                    <TableCell>Posts</TableCell>
-                    <TableCell>IEDC Activity Points</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>{userData.username}</TableCell>
-                    <TableCell>{`${userData.firstname} ${userData.lastname}`}</TableCell>
-                    <TableCell>{userData.year}</TableCell>
-                    <TableCell>{userData.Branch}</TableCell>
-                    <TableCell>{userData.email}</TableCell>
-                    <TableCell>{userData.gmail}</TableCell>
-                    <TableCell>{userData.phone}</TableCell>
-                    <TableCell>{userData.bloodgroup}</TableCell>
-                    <TableCell>{userData.fathername}</TableCell>
-                    <TableCell>{userData.fatherphnumber}</TableCell>
-                    <TableCell>{userData.mothername}</TableCell>
-                    <TableCell>{userData.motherphnumber}</TableCell>
-                    <TableCell>{userData.guardianname}</TableCell>
-                    <TableCell>{userData.guardianphnumber}</TableCell>
-                    <TableCell>{userData.hostel}</TableCell>
-                    <TableCell>{userData.ResidentialAddress}</TableCell>
-                    <TableCell>{userData.KTUid}</TableCell>
-                    <TableCell>{userData.Areaofinterset}</TableCell>
-                    <TableCell>{userData.yearofjoining}</TableCell>
-                    <TableCell>{userData.iedcjoiningdate}</TableCell>
-                    <TableCell>{userData.skills}</TableCell>
-                    <TableCell>{userData.password}</TableCell>
-                    <TableCell>{userData.posts}</TableCell>
-                    <TableCell>{userData.activityPoints}</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-              </div>
-            )}
-            {editMode ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-              >
-                Save Changes
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleEdit}
-              >
-                Edit Profile
-              </Button>
-            )}
-          </div>
-        )}
+                  {editMode ? (
+                    <form>
+
+                      <TextField
+                        label="Gmail"
+                        type="email"
+                        value={editedData.gmail}
+                        onChange={(e) => setEditedData({ ...editedData, gmail: e.target.value })}
+                      />
+                      <TextField
+                        label="Phone Number"
+                        type="tel"
+                        value={editedData.phone}
+                        onChange={(e) => setEditedData({ ...editedData, phone: e.target.value })}
+                      />
+                      <TextField
+                        label="Change Password"
+                        type="Password"
+                        value={editedData.password}
+                        onChange={(e) => setEditedData({ ...editedData, password: e.target.value })}
+                      />
+                      {/* Repeat this pattern for other form fields */}
+
+
+                    </form>
+                  ) : (
+                    <div className="table-container">
+                      <Table className="custom-table">
+
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Username</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Year</TableCell>
+                            <TableCell>Branch</TableCell>
+                            <TableCell>IEDC Mail ID</TableCell>
+                            <TableCell>G-Mail ID</TableCell>
+                            <TableCell>Phone Number</TableCell>
+                            <TableCell>Blood Group</TableCell>
+                            <TableCell>Father Name</TableCell>
+                            <TableCell>Father Phone Number</TableCell>
+                            <TableCell>Mother Name</TableCell>
+                            <TableCell>Mother Phone Number</TableCell>
+                            <TableCell>Guardian Name</TableCell>
+                            <TableCell>Guardian Phone Number</TableCell>
+                            <TableCell>Hostel</TableCell>
+                            <TableCell>Residential Address</TableCell>
+                            <TableCell>KtUid</TableCell>
+                            <TableCell>Area of Interest</TableCell>
+                            <TableCell>Year of Joining</TableCell>
+                            <TableCell>Year of Joining IEDC</TableCell>
+                            <TableCell>Skills</TableCell>
+                            <TableCell>Password</TableCell>
+                            <TableCell>Posts</TableCell>
+                            <TableCell>IEDC Activity Points</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell>{userData.username}</TableCell>
+                            <TableCell>{`${userData.firstname} ${userData.lastname}`}</TableCell>
+                            <TableCell>{userData.year}</TableCell>
+                            <TableCell>{userData.Branch}</TableCell>
+                            <TableCell>{userData.email}</TableCell>
+                            <TableCell>{userData.gmail}</TableCell>
+                            <TableCell>{userData.phone}</TableCell>
+                            <TableCell>{userData.bloodgroup}</TableCell>
+                            <TableCell>{userData.fathername}</TableCell>
+                            <TableCell>{userData.fatherphnumber}</TableCell>
+                            <TableCell>{userData.mothername}</TableCell>
+                            <TableCell>{userData.motherphnumber}</TableCell>
+                            <TableCell>{userData.guardianname}</TableCell>
+                            <TableCell>{userData.guardianphnumber}</TableCell>
+                            <TableCell>{userData.hostel}</TableCell>
+                            <TableCell>{userData.ResidentialAddress}</TableCell>
+                            <TableCell>{userData.KTUid}</TableCell>
+                            <TableCell>{userData.Areaofinterset}</TableCell>
+                            <TableCell>{userData.yearofjoining}</TableCell>
+                            <TableCell>{userData.iedcjoiningdate}</TableCell>
+                            <TableCell>{userData.skills}</TableCell>
+                            <TableCell>{userData.password}</TableCell>
+                            <TableCell>{userData.posts}</TableCell>
+                            <TableCell>{userData.activityPoints}</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                  {editMode ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                    >
+                      Save Changes
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      Edit Profile
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           )}
           {activeTab === 'uploadPoster' && (
@@ -441,77 +441,77 @@ const [activeTab, setActiveTab] = useState('personalInfo');
               {/* ... */}
 
               {userData.posts === 'CEO' && (
-              <div>
                 <div>
-                  <label>Select a Student:</label>
-                  <select
-                    value={selectedStudentUid}
-                    onChange={(e) => setSelectedStudentUid(e.target.value)}
-                  >
-                    <option value="">Select a Student</option>
-                    {studentList.map((student) => (
-                      <option key={student.uid} value={student.uid}>
-                        {student.firstname} {student.lastname}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {selectedStudentUid && (
                   <div>
-                    <TextField
-                      label="Activity Points"
-                      type="number"
-                      value={activityPoints}
-                      onChange={(e) => setActivityPoints(e.target.value)}
-                    />
-                    <Button
-                      variant="contained"
-        color="primary"
-        size="small" // Set button size to 'small'
-        sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
-                      onClick={handleUpdateActivityPoints}
+                    <label>Select a Student:</label>
+                    <select
+                      value={selectedStudentUid}
+                      onChange={(e) => setSelectedStudentUid(e.target.value)}
                     >
-                      Update Activity Points
-                    </Button>
+                      <option value="">Select a Student</option>
+                      {studentList.map((student) => (
+                        <option key={student.uid} value={student.uid}>
+                          {student.firstname} {student.lastname}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                )}
-              </div>
-            )}
-            {userData.posts === 'CPO' || userData.posts === 'CEO' ? (
-            <div>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleUploadPoster}
-              >
-                Upload Poster
-              </Button>
-            </div>
-          ) : null}
+                  {selectedStudentUid && (
+                    <div>
+                      <TextField
+                        label="Activity Points"
+                        type="number"
+                        value={activityPoints}
+                        onChange={(e) => setActivityPoints(e.target.value)}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small" // Set button size to 'small'
+                        sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
+                        onClick={handleUpdateActivityPoints}
+                      >
+                        Update Activity Points
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {userData.posts === 'CPO' || userData.posts === 'CEO' ? (
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleUploadPoster}
+                  >
+                    Upload Data
+                  </Button>
+                </div>
+              ) : null}
 
-          {showUploadButton && (
-        <div>
-          <input
-            type="file"
-            accept="/*"
-            onChange={handleFileChange}
-          />
-          <Button
-            variant="contained"
-        color="primary"
-        size="small" // Set button size to 'small'
-        sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
-            onClick={handleUploadDoc}
-          >
-            Upload Document
-          </Button>
-        </div>
-      )}
+              {showUploadButton && (
+                <div>
+                  <input
+                    type="file"
+                    accept="/*"
+                    onChange={handleFileChange}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small" // Set button size to 'small'
+                    sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
+                    onClick={handleUploadDoc}
+                  >
+                    Upload Document
+                  </Button>
+                </div>
+              )}
             </div>
           )}
           {activeTab === 'editProfile' && (
@@ -525,27 +525,27 @@ const [activeTab, setActiveTab] = useState('personalInfo');
       <div>
         <h2>Latest Events</h2>
         <ul>
-        {latestEvents.map((event) => (
-  <div key={event.id} className="event-item">
-    <Typography variant="h6">Event Name:{event.title}</Typography>
-    <Typography>{event.description}</Typography>
-    <Typography>Date: {event.date}</Typography>
-    <Typography>Description: {event.location}</Typography>
-    <Typography>Time: {event.time}</Typography>
-    
-    {event.registrationLink && (
-      <div className="registration-link">
-        <Typography variant="subtitle1">Registration Link:</Typography>
-        <a href={event.registrationLink} target="_blank" rel="noopener noreferrer">
-          {event.registrationLink}
-        </a>
-      </div>
-    )}
-  </div>
-))}
+          {latestEvents.map((event) => (
+            <div key={event.id} className="event-item">
+              <Typography variant="h6">Event Name:{event.title}</Typography>
+              <Typography>{event.description}</Typography>
+              <Typography>Date: {event.date}</Typography>
+              <Typography>Description: {event.location}</Typography>
+              <Typography>Time: {event.time}</Typography>
+
+              {event.registrationLink && (
+                <div className="registration-link">
+                  <Typography variant="subtitle1">Registration Link:</Typography>
+                  <a href={event.registrationLink} target="_blank" rel="noopener noreferrer">
+                    {event.registrationLink}
+                  </a>
+                </div>
+              )}
+            </div>
+          ))}
 
 
-         
+
         </ul>
       </div>
     </div>
