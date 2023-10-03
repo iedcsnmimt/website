@@ -155,31 +155,33 @@ function StudentSignupPage() {
 
               <div class={staffcss["input-container"]}>
                 <label for="Username"></label>
-                <input type="text" name="username" id="username" required />
                 <span>
                   Username
                 </span>
+                <input type="text" name="username" id="username" required />
+                
                 <div class="error"></div>
               </div>
 
 
               <div className={staffcss["input-container"]}>
   <label htmlFor="mail"></label>
+  <span>IEDC SNMIMT-Mail</span>
   <input
     type="email"
     name="mail"
     id="mail"
     required
     
-    defaultValue="hi@iedcsnmimt.ds" // Add the defaultValue attribute
+    defaultValue="YourFullName@iedcsnmimt.ds" // Add the defaultValue attribute
   />
-  <span>IEDC SNMIMT-Mail</span>
+ 
   <div className="error"></div>
 </div>
 
 
               <div className={staffcss["input-container"]}>
-
+              <span>Whether Your Membership ? </span>
                 <select name="member" id="member" required>
 
                   <option value="">Select Member Type</option>
@@ -187,58 +189,63 @@ function StudentSignupPage() {
                   <option value="renewal">Renewal</option>
                 </select>
                 <div className="error"></div>
-                <span>Whether Your Membership ? </span>
+                
               </div>
               <div class={staffcss["input-container"]}>
-                <label for="firstname"></label>
-                <input type="text" name="firstname" id="firstname" required />
-                <span>
+              <span>
                   First name
                 </span>
+                <label for="firstname"></label>
+                <input type="text" name="firstname" id="firstname" required />
+                
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
-                <label for="lastname"></label>
-                <input type="text" name="lastname" id="lastname" required />
-                <span>
+              <span>
                   Last name
                 </span>
+                <label for="lastname"></label>
+                <input type="text" name="lastname" id="lastname" required />
+                
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
-                <label for="age"></label>
-                <input type="text" name="age" id="age" required />
-                <span>
+              <span>
                   Age
                 </span>
+                <label for="age"></label>
+                <input type="text" name="age" id="age" required />
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>
+                  Gmail ID
+                </span>
                 <label for="gmail">
                 </label>
                 <input type="email" name="gmail" id="gmail" required />
-                <span>
-                  Gmail ID
-                </span>
+                
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>Phone</span>
                 <label for="phone">
                 </label>
                 <input type="tel" name="phone" id="phone" required />
-                <span>Phone</span>
+               
                 <div class="error"></div>
               </div>
 
 
 
               <div className={staffcss["input-container"]}>
-
+              <span>Branch</span>
                 <select name="branch" id="branch" required>
 
                   <option value="">Select Branch</option>
@@ -253,12 +260,12 @@ function StudentSignupPage() {
 
                 </select>
                 <div className="error"></div>
-                <span>Branch</span>
+              
               </div>
 
 
               <div className={staffcss["input-container"]}>
-
+              <span>Which Year You Study ?</span>
                 <select name="year" id="year" required>
 
                   <option value="">Select Year</option>
@@ -270,72 +277,79 @@ function StudentSignupPage() {
 
                 </select>
                 <div className="error"></div>
-                <span>Which Year You Study ?</span>
+               
               </div>
               <div class={staffcss["input-container"]}>
+              <span>Blood Group</span>
                 <label for="bloodgroup">
                 </label>
                 <input type="text" name="bloodgroup" id="blood" required />
-                <span>Blood Group</span>
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Father Name</span>
                 <label for="fathername">
                 </label>
                 <input type="text" name="fathername" id="fathername" required />
-                <span>Father Name</span>
+               
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>Father Phone Number</span>
                 <label for="fatherphnumber">
                 </label>
                 <input type="tel" name="fatherphnumber" id="fatherphnumber" required />
-                <span>Father Phone Number</span>
+                
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>Mother Name</span>
                 <label for="mothername">
                 </label>
                 <input type="text" name="mothername" id="mothername" required />
-                <span>Mother Name</span>
+                
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>Mother Phone Number</span>
                 <label for="motherphnumber">
                 </label>
                 <input type="tel" name="motherphnumber" id="motherphnumber" required />
-                <span>Mother Phone Number</span>
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Guardian Name</span>
                 <label for="guardianname">
                 </label>
                 <input type="text" name="guardianname" id="guardianname" required />
-                <span>Guardian Name</span>
+               
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>Guardian Phone Number</span>
                 <label for="guardianphnumber">
                 </label>
                 <input type="tel" name="guardianphnumber" id="guardianphnumber" required />
-                <span>Guardian Phone Number</span>
+                
                 <div class="error"></div>
               </div>
 
 
 
               <div className={staffcss["input-container"]}>
-
+              <span>Hostel or not ?</span>
                 <select name="hostel" id="hostel" required>
 
                   <option value="">Select Any one of it</option>
@@ -346,89 +360,100 @@ function StudentSignupPage() {
 
                 </select>
                 <div className="error"></div>
-                <span>Hostel or not ?</span>
+               
               </div>
               <div class={staffcss["input-container"]}>
+              <span>Residential Address</span>
                 <label for="ResidentialAddress">
                 </label>
                 <input type="text" name="ResidentialAddress" id="ResidentialAddress" required />
-                <span>Residential Address</span>
+
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>KTU-id</span>
                 <label for="KTUid">
                 </label>
                 <input type="text" name="KTUid" id="KTUid" required />
-                <span>KTU-id</span>
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Area of interset Eg:Programming,Marketing,Video editing,Anchoring,etc</span>
                 <label for="Areaofinterset">
                 </label>
                 <input type="text" name="Areaofinterset" id="Areaofinterset" required />
-                <span>Area of interset Eg:Programming,Marketing,Video editing,Anchoring,etc</span>
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Year Of Joining</span>
                 <label for="yearofjoining">
                 </label>
                 <input type="text" name="yearofjoining" id="yearofjoining" required />
-                <span>Year Of Joining</span>
+               
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>IEDC JOINING YEAR</span>
                 <label for="iedcjoiningdate">
                 </label>
                 <input type="text" name="iedcjoiningdate" id="iedcjoiningdate" required />
-                <span>IEDC JOINING YEAR</span>
+               
                 <div class="error"></div>
               </div>
 
 
               <div class={staffcss["input-container"]}>
+              <span>skills</span>
                 <label for="skills">
                 </label>
                 <input type="text" name="skills" id="skills" required />
-                <span>skills</span>
+              
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Your Post</span>
                 <label for="posts">
                 </label>
-                <input type="text" name="posts" id="posts" required />
-                <span>Your Post</span>
+                <input type="text" name="posts" id="posts" required  defaultValue="NO POST" />
+                
                 <div class="error"></div>
+               
               </div>
 
               <div class={staffcss["input-container"]}>
+              <span>Hobbys</span>
                 <label for="hobbys">
                 </label>
                 <input type="text" name="hobbys" id="hobbys" required />
-                <span>Hobbys</span>
+              
                 <div class="error"></div>
               </div>
 
 
 
               <div class={staffcss["input-container"]}>
+              <span>Password</span>
                 <label for="userpassword"></label>
                 <input type="password" name="userpassword" id="userpassword" class="user-password" required />
-                <span>Password</span>
+               
                 <div class="error"></div>
               </div>
 
               <div class={staffcss["input-container"]}>
-                <label for="user-password-confirm"></label>
-                <input type="password" name="userpasswordconfirm" id="userpasswordconfirm" class="password-confirmation" required />
-                <span>
+              <span>
                   Confirm Password
                 </span>
+                <label for="user-password-confirm"></label>
+                <input type="password" name="userpasswordconfirm" id="userpasswordconfirm" class="password-confirmation" required />
+               
                 <div class="error"></div>
               </div>
 
