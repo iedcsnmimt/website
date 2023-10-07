@@ -69,13 +69,14 @@ TabPanel.propTypes = {
 
 
 function StaffDashboard() {
-  const navigate =useNavigate;
+  
+  const navigate = useNavigate;
   const [staffData, setStaffData] = useState({});
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [assignedPosts, setAssignedPosts] = useState({});
-  const [showStudentList, setShowStudentList] = useState(false); // State to toggle student list visibility
-  const [events, setEvents] = useState([]); // State to store the events
+  const [showStudentList, setShowStudentList] = useState(false);
+  const [events, setEvents] = useState([]);
   const [eventName, setEventName] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [eventTime, setEventTime] = useState('');
@@ -84,9 +85,10 @@ function StaffDashboard() {
   const [registrationLink, setRegistrationLink] = useState('');
   const [currentTab, setCurrentTab] = useState(0);
   const [totalStudents, setTotalStudents] = useState(0);
-  // State to manage the editing of an event
+  const [isSearchActive, setIsSearchActive] = useState(false);
+  
+  
   const [editingEvent, setEditingEvent] = useState(null);
-  // State to store the edited event details
   const [editedEvent, setEditedEvent] = useState({
     id: '',
     title: '',
@@ -94,22 +96,48 @@ function StaffDashboard() {
     time: '',
     location: '',
     description: '',
-  });  
-
-
+  });
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearchQueryChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    setIsSearchActive(query.trim() !== ''); // Set isSearchActive to true if the query is not empty
+  };
+
+  const performSearch = () => {
+    const filteredStudents = students.filter((student) => {
+      const { firstname, lastname, Branch, year } = student;
+      const queryLower = searchQuery.toLowerCase();
+  
+      return (
+        firstname.toLowerCase().includes(queryLower) ||
+        lastname.toLowerCase().includes(queryLower) ||
+        Branch.toLowerCase().includes(queryLower) ||
+        year.toLowerCase().includes(queryLower) 
+        
+      );
+    });
+  
+    setSearchResults(filteredStudents);
+    console.log('Filtered Students:', filteredStudents); // Add this for debugging
+  };
+  
 
   useEffect(() => {
+    performSearch();
+  }, [searchQuery]);
 
-
-    // Fetch events published by the NODAL OFFICER
-    const eventsRef = firestore.collection('events'); // Replace with the actual collection name
+  useEffect(() => {
+    const eventsRef = firestore.collection('events');
     eventsRef
-      .orderBy('timestamp', 'desc') // Order events by timestamp in descending order
-      .limit(5) // Limit to the latest 5 events
+      .orderBy('timestamp', 'desc')
+      .limit(5)
       .get()
       .then((querySnapshot) => {
         const eventsData = [];
@@ -122,8 +150,7 @@ function StaffDashboard() {
       .catch((error) => {
         console.log('Error getting events:', error);
       });
-  
-    // Fetch staff data from Firestore based on the user's authentication
+
     const user = auth.currentUser;
     if (user) {
       const userId = user.uid;
@@ -137,14 +164,13 @@ function StaffDashboard() {
           } else {
             console.log('No such document!');
           }
-          setLoading(false); // Set loading to false after staff data is fetched
+          setLoading(false);
         })
         .catch((error) => {
           console.log('Error getting staff document:', error);
-          setLoading(false); // Set loading to false in case of an error
+          setLoading(false);
         });
 
-      // Fetch a list of students from Firestore
       const studentsRef = firestore.collection('SNMIMT/USERS/STUDENTS');
       studentsRef
         .get()
@@ -152,25 +178,21 @@ function StaffDashboard() {
           const studentList = [];
           querySnapshot.forEach((doc) => {
             const student = doc.data();
-            student.uid = doc.id; // Store the student's UID
+            student.uid = doc.id;
             studentList.push(student);
           });
           setStudents(studentList);
-          // Set the total count of students
-        setTotalStudents(studentList.length);
+          setTotalStudents(studentList.length);
         })
-        
         .catch((error) => {
           console.log('Error getting student list:', error);
         });
     }
   }, []);
 
-
   const handleShowStudentList = () => {
     setShowStudentList(!showStudentList);
   };
-
 
   const handlePostAssignment = (studentUid, selectedPost) => {
     setAssignedPosts((prevState) => ({
@@ -430,6 +452,16 @@ const handleTabChange = (event, newValue) => {
 </TabPanel>
 
 <TabPanel label="Student List" value={currentTab} index={1} sx={{ marginBottom: 4 }}>
+<div className="mb-4">
+        <Typography variant="h5" className="mb-2">
+          Search Students
+        </Typography>
+        <TextField
+          label="Search by Name, Department, or Year"
+          value={searchQuery}
+          onChange={handleSearchQueryChange}
+        />
+      </div>
   {showStudentList && (
     <div>
     
@@ -470,8 +502,9 @@ const handleTabChange = (event, newValue) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {students.map((student, index) => (
-            <TableRow key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
+       
+      {searchResults.map((student, index) => (
+        <TableRow key={index} className={index % 2 === 0 ? 'even-row' : 'odd-row'}>
               <TableCell>{student.username}</TableCell>
               <TableCell>{`${student.firstname} ${student.lastname}`}</TableCell>
               <TableCell>{student.year}</TableCell>
