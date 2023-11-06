@@ -131,7 +131,7 @@ function StudentSignupPage() {
     <div className={staffcss.container}>
       <div className={staffcss.header}>
         <title>Sign up | IEDC SNMIMT</title>
-     <h1>Closed Form</h1>
+     <h1>Form Is Closed 😢</h1>
      </div>
   
     </div>
