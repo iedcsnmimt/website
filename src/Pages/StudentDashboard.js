@@ -1,85 +1,81 @@
 import React, { useState, useEffect } from 'react';
+import {
+  Container,
+  Paper,
+  Grid,
+  Avatar,
+  Typography,
+  Button,
+  AppBar,
+  Tabs,
+  Tab,
+  TextField,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EventIcon from '@mui/icons-material/Event';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import SettingsIcon from '@mui/icons-material/Settings';
+import { auth, firestore } from '../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
-import { auth, firestore, storage } from '../firebaseConfig';
-// MATERIAL UI
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { TableCell, Table, TableBody, TableRow, TableHead, Typography } from '@mui/material';
-import LocalActivityIcon from '@mui/icons-material/LocalActivity';
-import '../css/studentdashboard.css';
+import * as XLSX from 'xlsx';
+import '../css/studentdashboard.css'; // Ensure this CSS file contains the custom styles
+
 function StudentDashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  // Define state variables for tab management
-  const [activeTab, setActiveTab] = useState('personalInfo');
-  const [activityPoints, setActivityPoints] = useState('');
-  const [studentList, setStudentList] = useState([]); // To store the list of all students
-  const [selectedStudentUid, setSelectedStudentUid] = useState('');
-  const [posterFile, setPosterFile] = useState(null); // State to store the selected poster file
-  // Define a state variable for the poster upload button visibility
-  const [showUploadButton, setShowUploadButton] = useState(false);
-  const [latestEvents, setLatestEvents] = useState([]); // State to store the latest events
 
-  // Define state variables for editable fields
+  const [studentList] = useState([]);
+
+  const [showUploadButton, setShowUploadButton] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // State for search input
+  const [latestEvents, setLatestEvents] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [eventName, setEventName] = useState('');
+  const [eventDate, setEventDate] = useState('');
+  const [eventTime, setEventTime] = useState('');
+  const [eventVenue, setEventVenue] = useState('');
+  const [eventDesc, setEventDesc] = useState('');
+  const [value, setValue] = useState(0);
+  const [isAdmin, setIsAdmin] = useState(false); // Add isAdmin state
+
+  const filteredStudentList = studentList.filter(student => {
+    const searchLower = searchTerm.toLowerCase();
+     
+    return (
+      (student.firstname && student.firstname.toLowerCase().includes(searchLower)) ||
+      (student.year && student.year.toLowerCase().includes(searchLower)) ||
+      (student.Branch && student.Branch.toLowerCase().includes(searchLower))
+    );
+  });
+
+
+  const handleTabChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   const [editedData, setEditedData] = useState({
     gmail: '',
     phone: '',
-    password: '',
     fatherphnumber: '',
     motherphnumber: '',
     year: '',
-    posts: '', // Add the 'posts' field
+    posts: '',
   });
-
-  const handleLogout = async () => {
-    try {
-      await auth.signOut();
-      navigate('/login');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleEdit = () => {
-    // Toggle edit mode and initialize edited data with the current user data
-    setEditMode(!editMode);
-    setEditedData({
-      gmail: userData.gmail,
-      phone: userData.phone,
-      password: '',
-      fatherphnumber: userData.fatherphnumber,
-      motherphnumber: userData.motherphnumber,
-      year: userData.year,
-      posts: userData.posts, // Initialize posts with current value
-    });
-  };
-
-  const handleSubmit = async () => {
-    try {
-      // Update the user's data in Firestore with the editedData
-      const user = auth.currentUser;
-      if (user) {
-        await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).update({
-          gmail: editedData.gmail,
-          phone: editedData.phone,
-          fatherphnumber: editedData.fatherphnumber,
-          motherphnumber: editedData.motherphnumber,
-          year: editedData.year,
-          posts: editedData.posts, // Update the 'posts' field
-        });
-
-        // Refresh the user data and exit edit mode
-        const updatedUserDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
-        if (updatedUserDoc.exists) {
-          setUserData(updatedUserDoc.data());
-          setEditMode(false);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,28 +96,26 @@ function StudentDashboard() {
   }, []);
 
   useEffect(() => {
-    const fetchStudentList = async () => {
+    const fetchData = async () => {
       try {
-        // Fetch the list of all students
-        const studentsSnapshot = await firestore.collection('SNMIMT/USERS/STUDENTS').get();
-        const studentsData = studentsSnapshot.docs.map((doc) => ({
-          uid: doc.id,
-          ...doc.data(),
-        }));
-        setStudentList(studentsData);
+        const user = auth.currentUser;
+        if (user) {
+          const userDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+          if (userDoc.exists) {
+            const userData = userDoc.data();
+            setUserData(userData);
+            setIsAdmin(userData.posts === 'CEO' || userData.posts === 'CCO');
+          }
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
-
-
-    fetchStudentList();
+    fetchData();
   }, []);
 
-
   useEffect(() => {
-    // Check if the user has 'CEO' or 'CCO' post to show the upload button
     if (userData && (userData.posts === 'CEO' || userData.posts === 'CCO')) {
       setShowUploadButton(true);
     } else {
@@ -129,427 +123,462 @@ function StudentDashboard() {
     }
   }, [userData]);
 
-
-  const handleUpdateActivityPoints = async () => {
-    try {
-      const user = auth.currentUser;
-      if (user && selectedStudentUid) {
-        // Update the selected student's activity points in Firestore
-        await firestore.collection('SNMIMT/USERS/STUDENTS').doc(selectedStudentUid).update({
-          activityPoints: activityPoints,
-        });
-
-        // Notify staff about the update
-        const notificationMessage = `Activity Points updated by CEO (${user.displayName}): ${activityPoints}`;
-
-        // Query the staff members with designation 'NODAL OFFICER'
-        const staffSnapshot = await firestore.collection('SNMIMT/USERS/STAFFS')
-          .where('designation', '==', 'NODAL OFFICER')
-          .get();
-
-        // Send the notification to each staff member
-        staffSnapshot.forEach(async (staffDoc) => {
-          await firestore.collection('notifications').add({
-            message: notificationMessage,
-            timestamp: new Date(),
-            recipientId: staffDoc.id, // Include staff member's ID as a recipient
-          });
-        });
-
-        // Reset the activity points and selected student
-        setActivityPoints('');
-        setSelectedStudentUid('');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-
-  const handleFileChange = (e) => {
-    // Update the posterFile state with the selected file
-    const file = e.target.files[0];
-    setPosterFile(file);
-  };
-
-  const handleUploadPoster = async () => {
-    try {
-      if (posterFile) {
-        const user = auth.currentUser;
-        if (user) {
-          // Define a unique storage path for the poster using the user's UID
-          const storagePath = `posters/${user.uid}/${posterFile.name}`;
-
-          // Upload the poster to Firebase Storage
-          const storageRef = storage.ref();
-          const posterRef = storageRef.child(storagePath);
-          await posterRef.put(posterFile);
-
-          // Get the download URL of the uploaded poster
-          const downloadURL = await posterRef.getDownloadURL();
-
-          // Store the download URL in Firestore
-          await firestore.collection('SNMIMT/POSTERS').add({
-            userId: user.uid,
-            downloadURL: downloadURL,
-            timestamp: new Date(),
-          });
-
-          alert('Poster uploaded successfully!');
-        }
-      } else {
-        alert('Please select a poster file to upload.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Failed to upload poster. Please check the console for details.');
-    }
-  };
-
-  const handleUploadDoc = async () => {
-    try {
-      if (posterFile) {
-        const user = auth.currentUser;
-        if (user) {
-          // Define a unique storage path for the poster using the user's UID
-          const storagePath = `docevent/${user.uid}/${posterFile.name}`;
-
-          // Upload the poster to Firebase Storage
-          const storageRef = storage.ref();
-          const posterRef = storageRef.child(storagePath);
-          await posterRef.put(posterFile);
-
-          // Get the download URL of the uploaded poster
-          const downloadURL = await posterRef.getDownloadURL();
-
-          // Store the download URL in Firestore
-          await firestore.collection('SNMIMT/POSTERS').add({
-            userId: user.uid,
-            downloadURL: downloadURL,
-            timestamp: new Date(),
-          });
-
-          alert('Poster uploaded successfully!');
-        }
-      } else {
-        alert('Please select a poster file to upload.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Failed to upload poster. Please check the console for details.');
-    }
-  };
-
-
-
   useEffect(() => {
-    // Fetch the latest events published by NODAL OFFICER
-    const fetchLatestEvents = async () => {
+    const fetchEvents = async () => {
       try {
-        const eventsSnapshot = await firestore
-          .collection('events') // Replace with the actual collection name
-          .orderBy('timestamp', 'desc') // Order events by timestamp in descending order
-          .limit(5) // Limit to the latest 5 events
-          .get();
-
-        const eventsData = eventsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
+        const eventsSnapshot = await firestore.collection('events').orderBy('timestamp', 'desc').get();
+        const eventsData = eventsSnapshot.docs.map(doc => doc.data());
         setLatestEvents(eventsData);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchLatestEvents();
+    fetchEvents();
   }, []);
 
-  const handleTabClick = (tabName) => {
-    setActiveTab(tabName);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const notificationsSnapshot = await firestore.collection('notifications').where('recipientId', '==', user.uid).get();
+          const notificationsData = notificationsSnapshot.docs.map(doc => doc.data());
+          setNotifications(notificationsData);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleEdit = () => {
+    setEditMode(!editMode);
+    setEditedData({
+      gmail: userData.gmail,
+      phone: userData.phone,
+      fatherphnumber: userData.fatherphnumber,
+      motherphnumber: userData.motherphnumber,
+      year: userData.year,
+      posts: userData.posts,
+    });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).update({
+          gmail: editedData.gmail,
+          phone: editedData.phone,
+          fatherphnumber: editedData.fatherphnumber,
+          motherphnumber: editedData.motherphnumber,
+          year: editedData.year,
+          posts: editedData.posts,
+        });
+
+        const updatedUserDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+        if (updatedUserDoc.exists) {
+          setUserData(updatedUserDoc.data());
+          setEditMode(false);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
 
+
+  const handleEventSubmit = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await firestore.collection('SNMIMT/EVENTS').add({
+          title: eventName,
+          date: eventDate,
+          description: eventDesc,
+          time: eventTime,
+          location: eventVenue,
+          timestamp: new Date(),
+          createdBy: user.uid,
+        });
+        alert('Event created successfully!');
+        // Clear form fields after successful submission
+        setEventName('');
+        setEventDate('');
+        setEventTime('');
+        setEventVenue('');
+        setEventDesc('');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Failed to create event. Please check the console for details.');
+    }
+  };
+
+
+
+
+  const handleExport = async () => {
+    try {
+      // Fetch all student data from Firestore
+      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/STUDENTS').get();
+      const studentsData = studentsSnapshot.docs.map(doc => ({
+        uid: doc.id,
+        ...doc.data(),
+      }));
+
+      // Format data for export
+      const formattedData = studentsData.map(student => ({
+        'First Name': student.firstname,       // Use Firestore field names
+        'Last Name': student.lastname,         // Use Firestore field names
+        'Branch': student.branch,              // Assuming this field exists
+        'Year': student.year,                  // Assuming this field exists
+        'Activity Points': student.activityPoints, // Assuming this field exists
+      }));
+
+
+
+      // Add headers to the data
+      const completeData = [...formattedData];
+
+      // Create a worksheet from the data
+      const worksheet = XLSX.utils.json_to_sheet(completeData, { skipHeader: false });
+
+      // Create a workbook and add the worksheet to it
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Points');
+
+      // Convert workbook to binary and create a Blob for downloading
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+      // Generate a download link for the Excel file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'activity_points.xlsx';
+      link.click();
+    } catch (error) {
+      console.error('Failed to export data:', error);
+      alert('Failed to export data. Please check the console for details.');
+    }
+  };
+
+
+
+
   return (
-    <div className="dashboard-container">
-      <h1>Welcome Back, {`${userData?.firstname || 'Student'} ${userData?.lastname || ''}`}
-      </h1>
-      <h2>Helloo..., {userData?.posts || 'students'}</h2>
-
-      <div className="activity-point">
-
-        <Typography variant="h2">
-          My IEDC Activity Points ⚡: {userData?.activityPoints}
-        </Typography>
-
-
-      </div>
-
-      <div className="button-container">
-        <Button
-          variant="contained"
-          color="warning"
-          size="small"
-          sx={{ ml: 2 }}
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
-      </div>
-      <div className="tabs-container">
-        <div className="tabs">
-          <div
-            className={`tab ${activeTab === 'personalInfo' ? 'active' : ''}`}
-            onClick={() => handleTabClick('personalInfo')}
-          >
-            Personal Information
-          </div>
-          <div
-            className={`tab ${activeTab === 'uploadPoster' ? 'active' : ''}`}
-            onClick={() => handleTabClick('uploadPoster')}
-          >
-            Upload Poster
-            <span className="beta-label">Beta</span>
-          </div>
-
-
-        </div>
-        <div className="tab-content">
-          {activeTab === 'personalInfo' && (
-            <div className="user-info">
-              {/* Personal Information content */}
-              {/* ... */}
-
-              {userData && (
-                <div className="user-info">
-                  <h2>Personal Information</h2>
-
-
+    <Container maxWidth="lg">
+      <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={4} lg={3}>
+            <Avatar sx={{ width: 80, height: 80, margin: 'auto' }}>
+              <AccountCircleIcon sx={{ fontSize: 60 }} />
+            </Avatar>
+            <Typography variant="h5" align="center" sx={{ marginTop: 2 }}>
+             Hai,{userData?.firstname || 'First Name'} {userData?.lastname || 'Last Name'}
+            </Typography>
+            <Typography variant="body1" align="center" color="textSecondary">
+              {userData?.email || 'email@example.com'}
+            </Typography>
+            <Typography variant="body1" align="center" color="textSecondary">
+             Status: {userData?.posts || 'Member'}
+            </Typography>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ marginTop: 2 }}
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={8} lg={9}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={value}
+                onChange={handleTabChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+              >
+                <Tab label="Profile" icon={<AccountCircleIcon />} />
+                <Tab label="Events" icon={<EventIcon />} />
+                <Tab label="Notifications" icon={<NotificationsIcon />} />
+                <Tab label="Settings" icon={<SettingsIcon />} />
+              </Tabs>
+            </AppBar>
+            <Box p={3}>
+              {value === 0 && (
+                <Box>
                   {editMode ? (
-                    <form>
-
+                    <Box>
                       <TextField
-                        label="Gmail"
-                        type="email"
+                        label="Email"
+                        fullWidth
+                        margin="normal"
                         value={editedData.gmail}
-                        onChange={(e) => setEditedData({ ...editedData, gmail: e.target.value })}
+                        onChange={(e) =>
+                          setEditedData({ ...editedData, gmail: e.target.value })
+                        }
                       />
                       <TextField
-                        label="Phone Number"
-                        type="tel"
+                        label="Phone"
+                        fullWidth
+                        margin="normal"
                         value={editedData.phone}
-                        onChange={(e) => setEditedData({ ...editedData, phone: e.target.value })}
+                        onChange={(e) =>
+                          setEditedData({ ...editedData, phone: e.target.value })
+                        }
                       />
                       <TextField
-                        label="Change Password"
-                        type="Password"
-                        value={editedData.password}
-                        onChange={(e) => setEditedData({ ...editedData, password: e.target.value })}
+                        label="Father's Phone"
+                        fullWidth
+                        margin="normal"
+                        value={editedData.fatherphnumber}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            fatherphnumber: e.target.value,
+                          })
+                        }
                       />
-                      {/* Repeat this pattern for other form fields */}
-
-
-                    </form>
-                  ) : (
-                    <div className="table-container">
-                      <Table className="custom-table">
-
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Username</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Year</TableCell>
-                            <TableCell>Branch</TableCell>
-                            <TableCell>IEDC Mail ID</TableCell>
-                            <TableCell>G-Mail ID</TableCell>
-                            <TableCell>Phone Number</TableCell>
-                            <TableCell>Blood Group</TableCell>
-                            <TableCell>Father Name</TableCell>
-                            <TableCell>Father Phone Number</TableCell>
-                            <TableCell>Mother Name</TableCell>
-                            <TableCell>Mother Phone Number</TableCell>
-                            <TableCell>Guardian Name</TableCell>
-                            <TableCell>Guardian Phone Number</TableCell>
-                            <TableCell>Hostel</TableCell>
-                            <TableCell>Residential Address</TableCell>
-                            <TableCell>KtUid</TableCell>
-                            <TableCell>Area of Interest</TableCell>
-                            <TableCell>Year of Joining</TableCell>
-                            <TableCell>Year of Joining IEDC</TableCell>
-                            <TableCell>Skills</TableCell>
-                            <TableCell>Password</TableCell>
-                            <TableCell>Posts</TableCell>
-                            <TableCell>IEDC Activity Points</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell>{userData.username}</TableCell>
-                            <TableCell>{`${userData.firstname} ${userData.lastname}`}</TableCell>
-                            <TableCell>{userData.year}</TableCell>
-                            <TableCell>{userData.Branch}</TableCell>
-                            <TableCell>{userData.email}</TableCell>
-                            <TableCell>{userData.gmail}</TableCell>
-                            <TableCell>{userData.phone}</TableCell>
-                            <TableCell>{userData.bloodgroup}</TableCell>
-                            <TableCell>{userData.fathername}</TableCell>
-                            <TableCell>{userData.fatherphnumber}</TableCell>
-                            <TableCell>{userData.mothername}</TableCell>
-                            <TableCell>{userData.motherphnumber}</TableCell>
-                            <TableCell>{userData.guardianname}</TableCell>
-                            <TableCell>{userData.guardianphnumber}</TableCell>
-                            <TableCell>{userData.hostel}</TableCell>
-                            <TableCell>{userData.ResidentialAddress}</TableCell>
-                            <TableCell>{userData.KTUid}</TableCell>
-                            <TableCell>{userData.Areaofinterset}</TableCell>
-                            <TableCell>{userData.yearofjoining}</TableCell>
-                            <TableCell>{userData.iedcjoiningdate}</TableCell>
-                            <TableCell>{userData.skills}</TableCell>
-                            <TableCell>{userData.password}</TableCell>
-                            <TableCell>{userData.posts}</TableCell>
-                            <TableCell>{userData.activityPoints}</TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
-                    </div>
-                  )}
-                  {editMode ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleSubmit}
-                    >
-                      Save Changes
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleEdit}
-                    >
-                      Edit Profile
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-          {activeTab === 'uploadPoster' && (
-            <div className="upload-poster">
-              {/* Upload Poster content */}
-              {/* ... */}
-
-              {userData.posts === 'CEO' && (
-                <div>
-                  <div>
-                    <label>Select a Student:</label>
-                    <select
-                      value={selectedStudentUid}
-                      onChange={(e) => setSelectedStudentUid(e.target.value)}
-                    >
-                      <option value="">Select a Student</option>
-                      {studentList.map((student) => (
-                        <option key={student.uid} value={student.uid}>
-                          {student.firstname} {student.lastname}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {selectedStudentUid && (
-                    <div>
                       <TextField
-                        label="Activity Points"
-                        type="number"
-                        value={activityPoints}
-                        onChange={(e) => setActivityPoints(e.target.value)}
+                        label="Mother's Phone"
+                        fullWidth
+                        margin="normal"
+                        value={editedData.motherphnumber}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            motherphnumber: e.target.value,
+                          })
+                        }
+                      />
+                      <TextField
+                        label="Year"
+                        fullWidth
+                        margin="normal"
+                        value={editedData.year}
+                        onChange={(e) =>
+                          setEditedData({ ...editedData, year: e.target.value })
+                        }
+                      />
+                      <TextField
+                        label="Posts"
+                        fullWidth
+                        margin="normal"
+                        value={editedData.posts}
+                        onChange={(e) =>
+                          setEditedData({ ...editedData, posts: e.target.value })
+                        }
                       />
                       <Button
                         variant="contained"
                         color="primary"
-                        size="small" // Set button size to 'small'
-                        sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
-                        onClick={handleUpdateActivityPoints}
+                        sx={{ mt: 2 }}
+                        onClick={handleSubmit}
                       >
-                        Update Activity Points
+                        Save
                       </Button>
-                    </div>
+                    </Box>
+                  ) : (
+                    <Box>
+                      <Typography variant="h6">Email: {userData?.gmail}</Typography>
+                      <Typography variant="h6">Phone: {userData?.phone}</Typography>
+                      <Typography variant="h6">
+                        Father's Phone: {userData?.fatherphnumber}
+                      </Typography>
+                      <Typography variant="h6">
+                        Mother's Phone: {userData?.motherphnumber}
+                      </Typography>
+                      <Typography variant="h6">Year: {userData?.year}</Typography>
+                      <Typography variant="h6">Posts: {userData?.posts}</Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 2 }}
+                        onClick={handleEdit}
+                      >
+                        Edit Profile
+                      </Button>
+                    </Box>
                   )}
-                </div>
+                </Box>
               )}
-              {userData.posts === 'CPO' || userData.posts === 'CEO' ? (
-                <div>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleUploadPoster}
-                  >
-                    Upload Data
-                  </Button>
-                </div>
-              ) : null}
-
-              {showUploadButton && (
-                <div>
-                  <input
-                    type="file"
-                    accept="/*"
-                    onChange={handleFileChange}
-                  />
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    size="small" // Set button size to 'small'
-                    sx={{ ml: 2 }} // Add margin to the left (adjust as needed)
-                    onClick={handleUploadDoc}
-                  >
-                    Upload Document
-                  </Button>
-                </div>
+              {value === 1 && (
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Latest Events
+                  </Typography>
+                  <List>
+                    {latestEvents.map((event, index) => (
+                      <React.Fragment key={index}>
+                        <ListItem>
+                          <ListItemText
+                            primary={event.title}
+                            secondary={`${event.date} | ${event.time} | ${event.location}`}
+                          />
+                        </ListItem>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                  {isAdmin && (
+                    <Box mt={3}>
+                      <Typography variant="h6" gutterBottom>
+                        Create New Event
+                      </Typography>
+                      <TextField
+                        label="Event Name"
+                        fullWidth
+                        margin="normal"
+                        value={eventName}
+                        onChange={(e) => setEventName(e.target.value)}
+                      />
+                      <TextField
+                        label="Event Date"
+                        type="date"
+                        fullWidth
+                        margin="normal"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        value={eventDate}
+                        onChange={(e) => setEventDate(e.target.value)}
+                      />
+                      <TextField
+                        label="Event Time"
+                        type="time"
+                        fullWidth
+                        margin="normal"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        value={eventTime}
+                        onChange={(e) => setEventTime(e.target.value)}
+                      />
+                      <TextField
+                        label="Event Venue"
+                        fullWidth
+                        margin="normal"
+                        value={eventVenue}
+                        onChange={(e) => setEventVenue(e.target.value)}
+                      />
+                      <TextField
+                        label="Event Description"
+                        fullWidth
+                        margin="normal"
+                        multiline
+                        rows={4}
+                        value={eventDesc}
+                        onChange={(e) => setEventDesc(e.target.value)}
+                      />
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ mt: 2 }}
+                        onClick={handleEventSubmit}
+                      >
+                        Create Event
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
               )}
-            </div>
-          )}
-          {activeTab === 'editProfile' && (
-            <div className="edit-profile">
-              {/* Edit Profile content */}
-              {/* ... */}
-            </div>
-          )}
-        </div>
-      </div>
-      <div>
-        <h2>Latest Events</h2>
-        <ul>
-          {latestEvents.map((event) => (
-            <div key={event.id} className="event-item">
-              <Typography variant="h6">Event Name:{event.title}</Typography>
-              <Typography>{event.description}</Typography>
-              <Typography>Date: {event.date}</Typography>
-              <Typography>Description: {event.location}</Typography>
-              <Typography>Time: {event.time}</Typography>
-
-              {event.registrationLink && (
-                <div className="registration-link">
-                  <Typography variant="subtitle1">Registration Link:</Typography>
-                  <a href={event.registrationLink} target="_blank" rel="noopener noreferrer">
-                    {event.registrationLink}
-                  </a>
-                </div>
+              {value === 2 && (
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Notifications
+                  </Typography>
+                  <List>
+                    {notifications.map((notification, index) => (
+                      <React.Fragment key={index}>
+                        <ListItem>
+                          <ListItemText primary={notification.message} />
+                        </ListItem>
+                        <Divider />
+                      </React.Fragment>
+                    ))}
+                  </List>
+                </Box>
               )}
-            </div>
-          ))}
+              {value === 3 && (
+                <Box>
+                  <Typography variant="h6" gutterBottom>
+                    Settings
+                  </Typography>
+                  Coming Soon New Updates
+                  {isAdmin && (
+                    <Box mt={3}>
+                      {showUploadButton && (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExport}
+                    >
+                      Export Data
+                    </Button>
+                  )}
+                      <Typography variant="h6" gutterBottom>
+                        Student List
+                      </Typography>
+                      <TextField
+                        label="Search Students"
+                        fullWidth
+                        margin="normal"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      <TableContainer component={Paper}>
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>First Name</TableCell>
+        <TableCell>Last Name</TableCell>
+        <TableCell>Year</TableCell>
+        <TableCell>Branch</TableCell>
+        <TableCell>Activity Points</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {filteredStudentList.map((student, index) => (
+        <TableRow key={index}>
+          <TableCell>{student.firstname}</TableCell>
+          
+          <TableCell>{student.lastname}</TableCell>
+          <TableCell>{student.year}</TableCell>
+          <TableCell>{student.Branch}</TableCell>
+          <TableCell>{student.activityPoints}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
 
-
-
-        </ul>
-      </div>
-    </div>
+                    </Box>
+                  )}
+                </Box>
+              )}
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Container>
   );
+  
 }
 
 export default StudentDashboard;

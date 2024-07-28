@@ -25,13 +25,11 @@ function StaffLogin() {
       if (userDoc.exists) {
         navigate('/dashboard/staff'); // Redirect to the staff dashboard on successful login
       } else {
-        // Handle the case where user data doesn't exist
         setError("User data not found.");
-        // You can choose to redirect or display an error message here
       }
     } catch (error) {
       console.error(error);
-      setError("Invalid email or password. Please try again."); // Set the error message
+      setError("Invalid email or password. Please try again.");
     }
   };
 
@@ -76,7 +74,6 @@ function StaffLogin() {
       </Container>
     </div>
   );
-  
 }
 
 export default StaffLogin;

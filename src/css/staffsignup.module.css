@@ -171,6 +171,11 @@ select {
   margin-bottom: 10px;
   color: #333;
 }
+/* Add this to your CSS file */
+select option[disabled] {
+  color: gray;
+}
+
 
 /* Style the Cash on Hand checkbox container */
 .cash-on-hand-container {

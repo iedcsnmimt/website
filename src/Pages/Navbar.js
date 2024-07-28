@@ -22,6 +22,7 @@ function Navbar() {
               About
             </a>
           </li>
+          {/*
           <li className="nav__item">
             <a href="#Gallery" className="nav__link">
               Gallery
@@ -36,6 +37,18 @@ function Navbar() {
             <a href="#mystore" className="nav__link">
               Mystore
             </a>
+          </li> */}
+          <li className="nav__item">
+          <a href="https://iedcsnmimtwiki.super.site" className="nav__link" target="_blank" rel="noopener noreferrer">
+  Wiki
+</a>
+
+          </li>
+          <li className="nav__item">
+          <a href="https://instagram.com/iedc.snm" className="nav__link" target="_blank" rel="noopener noreferrer">
+  Instagram Page
+</a>
+
           </li>
           <li className="nav__item">
             <a href="#contact" className="nav__link">

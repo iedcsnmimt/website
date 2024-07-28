@@ -197,6 +197,37 @@ img {
   row-gap: 5rem;
   padding: 4rem 0 5rem;
 }
+/* Parent container should take full viewport height */
+.home__data_wiki {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  height: 100vh; /* Full viewport height */
+}
+
+/* Text styling */
+.home__title__info {
+  font-size: var(--big-font-size);
+  margin-bottom: var(--mb-5);
+  text-align: center;
+}
+
+/* Button styling */
+.button_wiki {
+  display: inline-block;
+  background-color: var(--first-color);
+  color: #fff;
+  padding: .75rem 2.5rem;
+  font-weight: var(--font-semi);
+  border-radius: .5rem;
+  transition: .3s;
+  text-align: center; /* Center text inside the button */
+}
+
+.button_wiki:hover {
+  box-shadow: 0px 10px 36px rgba(0, 0, 0, 0.15);
+}
 
 .home__data {
   align-self: center;
@@ -206,14 +237,16 @@ img {
   font-size: var(--big-font-size);
   margin-bottom: var(--mb-5);
 }
-.home__title__info {
-  font-size: var(--big-font-size);
-  margin-bottom: var(--mb-30);
-  position: relative;
-  left: auto;
-  top: auto;
-}
+
 .home__title__info__min {
+  font-size: var(--min-font-size);
+  margin-bottom: var(--mb-5);
+  position: absolute;
+  left: 10px;
+  top: auto;
+  margin-top: 0%;
+}
+.home__title__info__min_wiki {
   font-size: var(--min-font-size);
   margin-bottom: var(--mb-5);
   position: absolute;

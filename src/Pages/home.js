@@ -57,9 +57,10 @@ function Home() {
             <span className="home__title-color"> IEDC-SNMIMT</span>
           </h5>
          
-          <a href="#contact" className="button">
-            Contact
-          </a>
+          <a href="https://iedcsnmimtwiki.super.site" className="button" target="_blank" rel="noopener noreferrer">
+  Wiki
+</a>
+
         </div>
 
         <div className="home__social">
@@ -85,7 +86,6 @@ function Home() {
 </div>
 
       </section>
-
       <section className="home bd-grid">
         <div className="home__data">
           <h1 className="home__title__info">"Creativity is just connecting things"</h1>
@@ -93,59 +93,62 @@ function Home() {
             <h1 className="home__title__info__min">-Steve Jobs</h1>
           </span>
         </div>
+
       </section>
+
+
+
+      
 
       {/* Rest of your sections and content */}
 
-      <>
-      <section>
-        <div className="container">
-          <div className="card">
-            <div className="content">
-              <div className="imgBx">
-                <img src={require("../img/idea.png")} alt="Idea" />
-              </div>
-              <div className="contentBx">
-                <h3>
-                  Innovation
-                  <br />
-                  <span>
-                    Innovation is the unrelenting drive to break the status quo and develop anew where have dared to go
-                  </span>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="content">
-              <div className="imgBx">
-                <img src={require("../img/team.png")} alt="Team" />
-              </div>
-              <div className="contentBx">
-                <h3>
-                  Entrepreneurship
-                  <br />
-                  <span>The best way to predict the future is to create it.</span>
-                </h3>
-              </div>
-            </div>
-          </div>
-          <div className="card">
-            <div className="content">
-              <div className="imgBx">
-                <img src={require("../img/tech.png")} alt="Technology" />
-              </div>
-              <div className="contentBx">
-                <h3>
-                  Technology
-                  <br />
-                  <span>It has become appallingly obvious that our technology has exceeded our humanity.</span>
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+     <>
+  {/*     <section className="container">
+  <div className="card">
+    <div className="content">
+      <div className="imgBx">
+        <img src={require("../img/idea.png")} alt="Idea" />
+      </div>
+      <div className="contentBx">
+        <h3>
+          Innovation
+          <br />
+          <span>
+            Innovation is the unrelenting drive to break the status quo and develop anew where have dared to go
+          </span>
+        </h3>
+      </div>
+    </div>
+  </div>
+   <div className="card">
+    <div className="content">
+      <div className="imgBx">
+        <img src={require("../img/team.png")} alt="Team" />
+      </div>
+      <div className="contentBx">
+        <h3>
+          Entrepreneurship
+          <br />
+          <span>The best way to predict the future is to create it.</span>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div className="card">
+    <div className="content">
+      <div className="imgBx">
+        <img src={require("../img/tech.png")} alt="Technology" />
+      </div>
+      <div className="contentBx">
+        <h3>
+          Technology
+          <br />
+          <span>It has become appallingly obvious that our technology has exceeded our humanity.</span>
+        </h3>
+      </div>
+    </div>
+  </div>*}
+</section>
 
       {/* ABOUT */}
       <section className="about section" id="about">
@@ -178,10 +181,18 @@ function Home() {
             </h2>
           </div>
         </div>
+        <h2 className="section-title">Our PodCast</h2>
+        <div style={{ left: '0', width: '90%', height: '192px', position: 'relative' }}>
+        <iframe src="https://open.spotify.com/embed/show/0H5u7yoZKQ9rnM2Cu19oOI?utm_source=oembed" style={{ top: '0', left: '0', width: '100%', height: '100%', position: 'absolute', border: '0' }} allowFullScreen allow="clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
       </section>
     </>
 
     <>
+
+   
+
+{/* 
       <section className="work section" id="Gallery">
         <h2 className="section-title">Gallery</h2>
 
@@ -206,8 +217,8 @@ function Home() {
           </a>
         </div>
       </section>
-
-      {/* TEAM MEMBERS */}
+*/}
+      {/* TEAM MEMBERS
       <section id="team">
                 <div class="row">
                
@@ -688,11 +699,11 @@ function Home() {
                         </a>
                       </div>
                     </div>
-                  </div>*/ }
+                  </div>
                 </div>
       </section>
-
-      {/* MY STORE */}
+ */}
+      {/* MY STORE
       <section className="mystore" id="mystore">
         <div className="container">
           <h1>Our Apps</h1>
@@ -739,9 +750,10 @@ function Home() {
             </div>
         </div>
           </div>
-          {/* ... (Repeat for other app cards) */}
+        
         </div>
-      </section>
+      </section> 
+      */}
 
       {/* CONTACT */}
       <section className="contact section" id="contact">

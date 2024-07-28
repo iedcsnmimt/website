@@ -10,6 +10,8 @@ import StaffDashboard from './Pages/StaffDashboard';
 import Login from './Pages/Login';
 import Home from './Pages/home';
 import FeedbackForm from './Pages/feedback';
+import StudentRenewalPage from './Pages/studentrevenvalsignup';
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
@@ -84,6 +86,7 @@ useEffect(() => {
           <Route path="/login" element={<Login/>}/>
           <Route path="/login/staffSignUp/0/" element={<Staffsignuppage />} />
           <Route path='/login/studentSignUp/0/' element={<StudentSignupPage/>} />
+          <Route path='/Signup/studentRevenalSignUp/0/' element={<StudentRenewalPage/>} />
           <Route path='/login/staffSignIn/1/' element={<StaffLogin/>} />
           <Route path='/login/studentSignIn/1/' element={<StudentLogin/>} />
           <Route path='/feedback/' element={<FeedbackForm/>} />
