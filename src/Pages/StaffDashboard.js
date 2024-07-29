@@ -35,7 +35,7 @@ import { firestore, auth ,storage} from '../firebaseConfig';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import '../css/staffdashboard.css';
-
+import * as XLSX from 'xlsx';
 
 
 // Define tab panel component
@@ -108,6 +108,52 @@ function StaffDashboard() {
     const query = e.target.value;
     setSearchQuery(query);
     setIsSearchActive(query.trim() !== ''); // Set isSearchActive to true if the query is not empty
+  };
+
+
+  const handleExport = async () => {
+    try {
+      // Fetch all student data from Firestore
+      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/STUDENTS').get();
+      const studentsData = studentsSnapshot.docs.map(doc => ({
+        uid: doc.id,
+        ...doc.data(),
+      }));
+
+      // Format data for export
+      const formattedData = studentsData.map(student => ({
+        'First Name': student.firstname,       // Use Firestore field names
+        'Last Name': student.lastname,         // Use Firestore field names
+        'Branch': student.branch,              // Assuming this field exists
+        'Year': student.year,                  // Assuming this field exists
+        'Activity Points': student.activityPoints, // Assuming this field exists
+      }));
+
+
+
+      // Add headers to the data
+      const completeData = [...formattedData];
+
+      // Create a worksheet from the data
+      const worksheet = XLSX.utils.json_to_sheet(completeData, { skipHeader: false });
+
+      // Create a workbook and add the worksheet to it
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Points');
+
+      // Convert workbook to binary and create a Blob for downloading
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+      // Generate a download link for the Excel file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'activity_points.xlsx';
+      link.click();
+    } catch (error) {
+      console.error('Failed to export data:', error);
+      alert('Failed to export data. Please check the console for details.');
+    }
   };
 
   const performSearch = () => {
@@ -464,7 +510,13 @@ const handleTabChange = (event, newValue) => {
       </div>
   {showStudentList && (
     <div>
-    
+     <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleExport}
+                    >
+                      Export Data
+                    </Button>
    
       <Typography variant="h5" className="mb-2">
         List of Students:
