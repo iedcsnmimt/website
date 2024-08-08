@@ -82,7 +82,7 @@ function StudentDashboard() {
       try {
         const user = auth.currentUser;
         if (user) {
-          const userDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+          const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
           if (userDoc.exists) {
             setUserData(userDoc.data());
           }
@@ -100,7 +100,7 @@ function StudentDashboard() {
       try {
         const user = auth.currentUser;
         if (user) {
-          const userDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+          const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
           if (userDoc.exists) {
             const userData = userDoc.data();
             setUserData(userData);
@@ -179,7 +179,7 @@ function StudentDashboard() {
     try {
       const user = auth.currentUser;
       if (user) {
-        await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).update({
+        await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).update({
           gmail: editedData.gmail,
           phone: editedData.phone,
           fatherphnumber: editedData.fatherphnumber,
@@ -188,7 +188,7 @@ function StudentDashboard() {
           posts: editedData.posts,
         });
 
-        const updatedUserDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+        const updatedUserDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
         if (updatedUserDoc.exists) {
           setUserData(updatedUserDoc.data());
           setEditMode(false);
@@ -234,7 +234,7 @@ function StudentDashboard() {
   const handleExport = async () => {
     try {
       // Fetch all student data from Firestore
-      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/STUDENTS').get();
+      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').get();
       const studentsData = studentsSnapshot.docs.map(doc => ({
         uid: doc.id,
         ...doc.data(),
@@ -244,7 +244,7 @@ function StudentDashboard() {
       const formattedData = studentsData.map(student => ({
         'First Name': student.firstname,       // Use Firestore field names
         'Last Name': student.lastname,         // Use Firestore field names
-        'Branch': student.branch,              // Assuming this field exists
+        'Branch': student.Branch,              // Assuming this field exists
         'Year': student.year,                  // Assuming this field exists
         'Activity Points': student.activityPoints, // Assuming this field exists
       }));
@@ -405,6 +405,7 @@ function StudentDashboard() {
                         Mother's Phone: {userData?.motherphnumber}
                       </Typography>
                       <Typography variant="h6">Year: {userData?.year}</Typography>
+                      <Typography variant="h6">Branch: {userData?.Branch}</Typography>
                       <Typography variant="h6">Posts: {userData?.posts}</Typography>
                       <Button
                         variant="contained"

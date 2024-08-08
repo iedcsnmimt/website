@@ -39,8 +39,8 @@ function Navbar() {
             </a>
           </li> */}
           <li className="nav__item">
-          <a href="https://iedcsnmimtwiki.super.site" className="nav__link" target="_blank" rel="noopener noreferrer">
-  Wiki
+          <a href="https://opaliedc.vercel.app" className="nav__link" target="_blank" rel="noopener noreferrer">
+  Opal
 </a>
 
           </li>
