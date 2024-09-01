@@ -252,7 +252,7 @@ function StaffDashboard() {
       const batch = firestore.batch();
 
       Object.keys(assignedPosts).forEach((studentUid) => {
-        const studentRef = firestore.collection('SNMIMT/USERS/STUDENTS').doc(studentUid);
+        const studentRef = firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(studentUid);
         batch.update(studentRef, { posts: assignedPosts[studentUid] });
       });
 
