@@ -217,7 +217,7 @@ function StaffDashboard() {
           setLoading(false);
         });
 
-      const studentsRef = firestore.collection('SNMIMT/USERS/STUDENTS');
+      const studentsRef = firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS');
       studentsRef
         .get()
         .then((querySnapshot) => {
