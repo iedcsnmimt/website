@@ -114,7 +114,7 @@ function StaffDashboard() {
   const handleExport = async () => {
     try {
       // Fetch all student data from Firestore
-      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/STUDENTS').get();
+      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').get();
       const studentsData = studentsSnapshot.docs.map(doc => ({
         uid: doc.id,
         ...doc.data(),
