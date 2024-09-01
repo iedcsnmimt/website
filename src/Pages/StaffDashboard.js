@@ -126,7 +126,10 @@ function StaffDashboard() {
         'Last Name': student.lastname,         // Use Firestore field names
         'Branch': student.branch,              // Assuming this field exists
         'Year': student.year,                  // Assuming this field exists
+        'Phone':student.phone,
+        'renewalDate':student.renewalDate,
         'Activity Points': student.activityPoints, // Assuming this field exists
+
       }));
 
 
