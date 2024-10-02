@@ -62,7 +62,9 @@ function StudentSignupPage() {
       iedcjoiningdate: event.target.iedcjoiningdate.value,
       posts: event.target.posts.value,
       password: event.target["userpassword"].value,
-      passwordconfirm: event.target["userpasswordconfirm"].value
+      passwordconfirm: event.target["userpasswordconfirm"].value,
+      dob:event.target.dob.value,
+      gender:event.target.gender.value
 
     };
 
@@ -99,7 +101,7 @@ function StudentSignupPage() {
           const paymentScreenshot = paymentScreenshotInput.files[0];
   
           // Create a reference to the storage location
-          const storageRef = storage.ref(`payment-screenshots/${userId}/${paymentScreenshot.name}`);
+          const storageRef = storage.ref(`payment-screenshots/24-25/${userId}/${paymentScreenshot.name}`);
   
           // Upload the file
           const snapshot = await storageRef.put(paymentScreenshot);
@@ -113,7 +115,7 @@ function StudentSignupPage() {
       }
   
       // Save user data to Firestore with the UID as the document ID
-      await firestore.collection('SNMIMT/USERS/STUDENTS').doc(userId).set({
+      await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(userId).set({
         ...formData,
         paymentScreenshotURL: downloadURL, // Store the URL
       });
@@ -180,8 +182,8 @@ function StudentSignupPage() {
   <span>Whether Your Membership?</span>
   <select name="member" id="member" required>
     <option value="">Select Member Type</option>
-    <option value="new" disabled>New Member</option>
-    <option value="renewal">Renewal</option>
+    <option value="new">New Member</option>
+    <option value="renewal" disabled>Renewal</option>
   </select>
   <div className="error"></div>
 </div>
@@ -226,7 +228,25 @@ function StudentSignupPage() {
                 
                 <div class="error"></div>
               </div>
+  {/* Date of Birth */}
+  <div className={staffcss["dob-input"]}>
+  <span>Date of Birth</span>
+  <input type="date" name="dob" id="dob" required />
+  <div className="error"></div>
+</div>
 
+
+            {/* Gender */}
+            <div class={staffcss["input-container"]}>
+              <span>Gender</span>
+              <select name="gender" id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="others">Others</option>
+              </select>
+              <div class="error"></div>
+            </div>
 
               <div class={staffcss["input-container"]}>
               <span>Phone</span>
@@ -267,7 +287,7 @@ function StudentSignupPage() {
                   <option value="1">First Year</option>
                   <option value="2">Second Year</option>
                   <option value="3">Third Year</option>
-                  <option value="4">Fourth Year</option>
+                  <option value="4" disabled>Fourth Year</option>
 
 
                 </select>
@@ -475,7 +495,7 @@ function StudentSignupPage() {
                         <strong>Google Pay UPI ID</strong>
                       </label>
                       <div className={staffcss["upi-container"]}>
-                        <span>bijusasi9446@okaxis</span>
+                      <span>anjithbineesh@okhdfcbank</span>
                        
                         <img
                           src={upilogo}  // Replace with the actual path to your image
@@ -484,7 +504,7 @@ function StudentSignupPage() {
                         />
                         
                       </div>
-                      <span style={{ fontWeight: 'bold',fontSize: '18px' }}>GPay Number = 9446220354</span>
+                      <span style={{ fontWeight: 'bold', fontSize: '18px' }}>GPay Number = 8593844084</span>
 
                     </div>
 
@@ -506,7 +526,6 @@ function StudentSignupPage() {
                   <h3>Membership Fee Rules:</h3>
                   <ul>
                     <li>New Members: Rs. 50</li>
-                    <li>Renewal: Rs. 30</li>
                     <li>"For third-year students who are not yet IEDC members and wish to join, there will be an additional fine of Rs. 100."</li>
                     <li>"Fourth Years Only Renewal Is Permitted."</li>
 
