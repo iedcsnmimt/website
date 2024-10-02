@@ -21,7 +21,7 @@ function StudentLogin() {
       const user = userCredential.user;
 
       // Assuming user data is stored in the "SNMIMT/USERS/STUDENTS" collection
-      const userDoc = await firestore.collection('SNMIMT/USERS/STUDENTS').doc(user.uid).get();
+      const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
 
       if (userDoc.exists) {
         navigate('/dashboard/student'); // Redirect to the student dashboard on successful login
