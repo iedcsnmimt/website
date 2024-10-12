@@ -17,12 +17,12 @@ function Navbar() {
               Home
             </a>
           </li>
-          <li className="nav__item">
+        {/*  <li className="nav__item">
             <a href="#about" className="nav__link">
               About
             </a>
           </li>
-          {/*
+          
           <li className="nav__item">
             <a href="#Gallery" className="nav__link">
               Gallery
@@ -50,11 +50,27 @@ function Navbar() {
 </a>
 
           </li>
+
           <li className="nav__item">
+          <a href="https://lookerstudio.google.com/reporting/d9cc84d5-dcad-44a3-bccb-dd226a9d3da4" className="nav__link" target="_blank" rel="noopener noreferrer">
+  Lead's Scores Board
+</a>
+
+          </li>
+
+          <li className="nav__item">
+          <a href="https://tinkerhubsnmimt.super.site/" className="nav__link" target="_blank" rel="noopener noreferrer">
+  TinkerHub
+</a>
+
+          </li>
+
+        {/*  <li className="nav__item">
             <a href="#contact" className="nav__link">
               Contact
             </a>
-          </li>
+          </li>*/}
+
         </ul>
       </div>
 
