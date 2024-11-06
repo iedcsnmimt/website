@@ -248,7 +248,7 @@ function StudentDashboard() {
         'Year': student.year,                  // Assuming this field exists
         'Dept': student.Branch,
         'phone number': student.phone,
-        'member status': stduent.member,
+        'member status': student.member,
         'payment status': studnet.paymentScreenshotURL,
         'Activity Points': student.activityPoints, // Assuming this field exists
       }));
