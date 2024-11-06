@@ -246,6 +246,10 @@ function StudentDashboard() {
         'Last Name': student.lastname,         // Use Firestore field names
         'Branch': student.Branch,              // Assuming this field exists
         'Year': student.year,                  // Assuming this field exists
+        'Dept': student.Branch,
+        'phone number': student.phone,
+        'member status': stduent.member,
+        'payment status': studnet.paymentScreenshotURL,
         'Activity Points': student.activityPoints, // Assuming this field exists
       }));
 
