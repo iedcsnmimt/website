@@ -249,7 +249,7 @@ function StudentDashboard() {
         'Dept': student.Branch,
         'phone number': student.phone,
         'member status': student.member,
-        'payment status': studnet.paymentScreenshotURL,
+        'payment status': student.paymentScreenshotURL,
         'Activity Points': student.activityPoints, // Assuming this field exists
       }));
 
