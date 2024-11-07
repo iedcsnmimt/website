@@ -14,23 +14,32 @@ function StudentLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Add loading state for login button
 
   const handleLogin = async () => {
+    setLoading(true);
+    setError(null); // Reset error before each login attempt
     try {
       const userCredential = await auth.signInWithEmailAndPassword(username, password);
       const user = userCredential.user;
 
-      // Assuming user data is stored in the "SNMIMT/USERS/STUDENTS" collection
+      // Assuming user data is stored in the "SNMIMT/USERS/2024-25/REV/STUDENTS" collection
       const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
 
       if (userDoc.exists) {
+        // Set login status in localStorage to keep the user logged in
+        localStorage.setItem('isAuthenticated', 'true');
         navigate('/dashboard/student'); // Redirect to the student dashboard on successful login
       } else {
-        setError("User data not found.");
+        setError("User data not found. Please contact support."); // Clear login state on error
+        localStorage.removeItem('isAuthenticated');
       }
     } catch (error) {
       console.error(error);
-      setError("Invalid email or password. Please try again."); // Set the error message
+      setError("Invalid email or password. Please try again."); // Set an error message
+      localStorage.removeItem('isAuthenticated');
+    } finally {
+      setLoading(false); // Stop loading state after login attempt
     }
   };
 
@@ -94,6 +103,7 @@ function StudentLogin() {
               color="primary"
               fullWidth
               onClick={handleLogin}
+              disabled={loading} // Disable button while loading
               sx={{
                 borderRadius: '10px',
                 marginTop: '20px',
@@ -102,7 +112,7 @@ function StudentLogin() {
                 boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
               }}
             >
-              Login
+              {loading ? 'Logging in...' : 'Login'}
             </Button>
             {error && (
               <Alert severity="error" sx={{ marginTop: '16px' }}>

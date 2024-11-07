@@ -10,8 +10,6 @@ import {
   Tabs,
   Tab,
   TextField,
-  Card,
-  CardContent,
   List,
   ListItem,
   ListItemText,
@@ -23,6 +21,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Alert,
 } from '@mui/material';
 
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -32,17 +31,15 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { auth, firestore } from '../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from 'xlsx';
-import '../css/studentdashboard.css'; // Ensure this CSS file contains the custom styles
+import '../css/studentdashboard.css';
 
 function StudentDashboard() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [editMode, setEditMode] = useState(false);
-
   const [studentList] = useState([]);
-
   const [showUploadButton, setShowUploadButton] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(''); // State for search input
+  const [searchTerm, setSearchTerm] = useState('');
   const [latestEvents, setLatestEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [eventName, setEventName] = useState('');
@@ -51,18 +48,18 @@ function StudentDashboard() {
   const [eventVenue, setEventVenue] = useState('');
   const [eventDesc, setEventDesc] = useState('');
   const [value, setValue] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false); // Add isAdmin state
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredStudentList = studentList.filter(student => {
+  const filteredStudentList = studentList.filter((student) => {
     const searchLower = searchTerm.toLowerCase();
-     
     return (
       (student.firstname && student.firstname.toLowerCase().includes(searchLower)) ||
       (student.year && student.year.toLowerCase().includes(searchLower)) ||
       (student.Branch && student.Branch.toLowerCase().includes(searchLower))
     );
   });
-
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
@@ -78,42 +75,32 @@ function StudentDashboard() {
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = auth.currentUser;
-        if (user) {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
           const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
           if (userDoc.exists) {
-            setUserData(userDoc.data());
+            const data = userDoc.data();
+            setUserData(data);
+            localStorage.setItem('userData', JSON.stringify(data));
+            setIsAdmin(data.posts === 'CEO' || data.posts === 'CCO');
+          } else {
+            setError("User data not found.");
           }
+        } catch (err) {
+          console.error(err);
+          setError("Failed to load user data. Please try again.");
+        } finally {
+          setIsLoading(false);
         }
-      } catch (error) {
-        console.error(error);
+      } else {
+        localStorage.removeItem('userData');
+        navigate('/login');
       }
-    };
+    });
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const user = auth.currentUser;
-        if (user) {
-          const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
-          if (userDoc.exists) {
-            const userData = userDoc.data();
-            setUserData(userData);
-            setIsAdmin(userData.posts === 'CEO' || userData.posts === 'CCO');
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+    return () => unsubscribe();
+  }, [navigate]);
 
   useEffect(() => {
     if (userData && (userData.posts === 'CEO' || userData.posts === 'CCO')) {
@@ -127,7 +114,7 @@ function StudentDashboard() {
     const fetchEvents = async () => {
       try {
         const eventsSnapshot = await firestore.collection('events').orderBy('timestamp', 'desc').get();
-        const eventsData = eventsSnapshot.docs.map(doc => doc.data());
+        const eventsData = eventsSnapshot.docs.map((doc) => doc.data());
         setLatestEvents(eventsData);
       } catch (error) {
         console.error(error);
@@ -143,7 +130,7 @@ function StudentDashboard() {
         const user = auth.currentUser;
         if (user) {
           const notificationsSnapshot = await firestore.collection('notifications').where('recipientId', '==', user.uid).get();
-          const notificationsData = notificationsSnapshot.docs.map(doc => doc.data());
+          const notificationsData = notificationsSnapshot.docs.map((doc) => doc.data());
           setNotifications(notificationsData);
         }
       } catch (error) {
@@ -157,9 +144,11 @@ function StudentDashboard() {
   const handleLogout = async () => {
     try {
       await auth.signOut();
+      localStorage.removeItem('userData');
       navigate('/login');
     } catch (error) {
-      console.error(error);
+      console.error("Error during logout:", error);
+      setError("Failed to log out. Please try again.");
     }
   };
 
@@ -179,15 +168,7 @@ function StudentDashboard() {
     try {
       const user = auth.currentUser;
       if (user) {
-        await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).update({
-          gmail: editedData.gmail,
-          phone: editedData.phone,
-          fatherphnumber: editedData.fatherphnumber,
-          motherphnumber: editedData.motherphnumber,
-          year: editedData.year,
-          posts: editedData.posts,
-        });
-
+        await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).update(editedData);
         const updatedUserDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
         if (updatedUserDoc.exists) {
           setUserData(updatedUserDoc.data());
@@ -198,8 +179,6 @@ function StudentDashboard() {
       console.error(error);
     }
   };
-
-
 
   const handleEventSubmit = async () => {
     try {
@@ -215,7 +194,6 @@ function StudentDashboard() {
           createdBy: user.uid,
         });
         alert('Event created successfully!');
-        // Clear form fields after successful submission
         setEventName('');
         setEventDate('');
         setEventTime('');
@@ -228,48 +206,33 @@ function StudentDashboard() {
     }
   };
 
-
-
-
   const handleExport = async () => {
     try {
-      // Fetch all student data from Firestore
       const studentsSnapshot = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').get();
-      const studentsData = studentsSnapshot.docs.map(doc => ({
+      const studentsData = studentsSnapshot.docs.map((doc) => ({
         uid: doc.id,
         ...doc.data(),
       }));
 
-      // Format data for export
-      const formattedData = studentsData.map(student => ({
-        'First Name': student.firstname,       // Use Firestore field names
-        'Last Name': student.lastname,         // Use Firestore field names
-        'Branch': student.Branch,              // Assuming this field exists
-        'Year': student.year,                  // Assuming this field exists
+      const formattedData = studentsData.map((student) => ({
+        'First Name': student.firstname,
+        'Last Name': student.lastname,
+        'Branch': student.Branch,
+        'Year': student.year,
         'Dept': student.Branch,
-        'phone number': student.phone,
-        'member status': student.member,
-        'payment status': student.paymentScreenshotURL,
-        'Activity Points': student.activityPoints, // Assuming this field exists
+        'Phone Number': student.phone,
+        'Member Status': student.member,
+        'Payment Status': student.paymentScreenshotURL,
+        'Activity Points': student.activityPoints,
       }));
 
-
-
-      // Add headers to the data
-      const completeData = [...formattedData];
-
-      // Create a worksheet from the data
-      const worksheet = XLSX.utils.json_to_sheet(completeData, { skipHeader: false });
-
-      // Create a workbook and add the worksheet to it
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Points');
 
-      // Convert workbook to binary and create a Blob for downloading
       const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
       const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
 
-      // Generate a download link for the Excel file
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'activity_points.xlsx';
@@ -280,6 +243,7 @@ function StudentDashboard() {
     }
   };
 
+  if (isLoading) return <div>Loading...</div>;
 
 
 
