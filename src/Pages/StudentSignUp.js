@@ -134,7 +134,7 @@ function StudentSignupPage() {
       <main className={staffcss['card-container']}>
         <div className={staffcss['image-container']}>
           <h1 className={staffcss.company}>
-            IEDC SNMIMT STUDENT MEMBERSHIP RENEWAL CLOSED
+            IEDC SNMIMT STUDENT MEMBERSHIP CLOSED
           </h1>
         </div>
         </main>
