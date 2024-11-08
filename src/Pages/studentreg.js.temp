@@ -1,4 +1,136 @@
-<div>
+import React, { useState } from 'react';
+import staffcss from '../css/staffsignup.module.css';
+import upilogo from '../img/upi-logo.png';
+import { auth, firestore, storage } from '../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+
+
+function StudentSignupPage() {
+  const navigate = useNavigate();
+  const [cashOnHand, setCashOnHand] = useState(false);
+  const [year, setYear] = useState('');
+  
+
+  const isPasswordValid = (password) => {
+    // Password should be at least 8 characters long
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Password should contain at least one alphabet, one number, and one symbol
+    const alphabetPattern = /[a-zA-Z]/;
+    const numberPattern = /[0-9]/;
+    const symbolPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/;
+
+    return (
+      alphabetPattern.test(password) &&
+      numberPattern.test(password) &&
+      symbolPattern.test(password)
+    );
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Collect form data
+    const formData = {
+      username: event.target.username.value,
+      firstname: event.target.firstname.value,
+      lastname: event.target.lastname.value,
+      email: event.target.mail.value,
+      gmail: event.target.gmail.value,
+      member: event.target.member.value,
+      age: event.target.age.value,
+      phone: event.target.phone.value,
+      cashOnHand: cashOnHand,
+      Branch: event.target.branch.value,
+      year: event.target.year.value,
+      bloodgroup: event.target.bloodgroup.value,
+      hobbys: event.target.hobbys.value,
+      fathername: event.target.fathername.value,
+      fatherphnumber: event.target.fatherphnumber.value,
+      mothername: event.target.mothername.value,
+      motherphnumber: event.target.motherphnumber.value,
+      guardianname: event.target.guardianname.value,
+      guardianphnumber: event.target.guardianphnumber.value,
+      hostel: event.target.hostel.value,
+      ResidentialAddress: event.target.ResidentialAddress.value,
+      KTUid: event.target.KTUid.value,
+      Areaofinterset: event.target.Areaofinterset.value,
+      yearofjoining: event.target.yearofjoining.value,
+      skills: event.target.skills.value,
+      iedcjoiningdate: event.target.iedcjoiningdate.value,
+      posts: event.target.posts.value,
+      password: event.target["userpassword"].value,
+      passwordconfirm: event.target["userpasswordconfirm"].value,
+      dob:event.target.dob.value,
+      gender:event.target.gender.value
+
+    };
+
+    const confirmPassword = event.target["userpasswordconfirm"].value;
+
+    // Check if password and confirm password match
+    if (formData.password !== confirmPassword) {
+      alert("Password and Confirm Password do not match.");
+      return; // Stop form submission
+    }
+  
+    // Check if the password meets the requirements
+    if (!isPasswordValid(formData.password)) {
+      alert("Password must be at least 8 characters long and contain alphabets, numbers, and symbols.");
+      return; // Stop form submission
+    }
+  
+    try {
+      // Create a new user account using Firebase Authentication
+      const userCredential = await auth.createUserWithEmailAndPassword(
+        formData.email,
+        formData.password
+      );
+  
+      // Get the newly created user's unique ID (UID)
+      const userId = userCredential.user.uid;
+  
+      let downloadURL = null; // Initialize downloadURL
+  
+      if (!formData.cashOnHand) {
+        // If not paying by cash, handle the file upload
+        const paymentScreenshotInput = event.target.paymentScreenshot;
+        if (paymentScreenshotInput && paymentScreenshotInput.files.length > 0) {
+          const paymentScreenshot = paymentScreenshotInput.files[0];
+  
+          // Create a reference to the storage location
+          const storageRef = storage.ref(`payment-screenshots/24-25/${userId}/${paymentScreenshot.name}`);
+  
+          // Upload the file
+          const snapshot = await storageRef.put(paymentScreenshot);
+  
+          // Get the URL of the uploaded file
+          downloadURL = await snapshot.ref.getDownloadURL();
+        } else {
+          console.error("Payment screenshot input not found or no file selected.");
+          // You might want to show an error message to the user or take appropriate action.
+        }
+      }
+  
+      // Save user data to Firestore with the UID as the document ID
+      await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(userId).set({
+        ...formData,
+        paymentScreenshotURL: downloadURL, // Store the URL
+      });
+  
+      // Show a success message and redirect
+      alert("Account created successfully!");
+      navigate('/login/studentSignIn/1/'); // Redirect to the login page
+    } catch (error) {
+      console.error("Error creating user account:", error.message);
+      alert("Error creating user account. Please try again.");
+    }
+  };
+
+  return (
+    <div>
   <main className={staffcss['card-container']}>
     <div className={staffcss['image-container']}>
       <h1 className={staffcss.company}>
@@ -46,17 +178,16 @@
 </div>
 
 
-              <div className={staffcss["input-container"]}>
-              <span>Whether Your Membership ? </span>
-                <select name="member" id="member" required>
+<div className={staffcss["input-container"]}>
+  <span>Whether Your Membership?</span>
+  <select name="member" id="member" required>
+    <option value="">Select Member Type</option>
+    <option value="new">New Member</option>
+    <option value="renewal" disabled>Renewal</option>
+  </select>
+  <div className="error"></div>
+</div>
 
-                  <option value="">Select Member Type</option>
-                  <option value="new">New Member</option>
-                  <option value="renewal">Renewal</option>
-                </select>
-                <div className="error"></div>
-                
-              </div>
               <div class={staffcss["input-container"]}>
               <span>
                   First name
@@ -97,7 +228,25 @@
                 
                 <div class="error"></div>
               </div>
+  {/* Date of Birth */}
+  <div className={staffcss["dob-input"]}>
+  <span>Date of Birth</span>
+  <input type="date" name="dob" id="dob" required />
+  <div className="error"></div>
+</div>
 
+
+            {/* Gender */}
+            <div class={staffcss["input-container"]}>
+              <span>Gender</span>
+              <select name="gender" id="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="others">Others</option>
+              </select>
+              <div class="error"></div>
+            </div>
 
               <div class={staffcss["input-container"]}>
               <span>Phone</span>
@@ -138,7 +287,7 @@
                   <option value="1">First Year</option>
                   <option value="2">Second Year</option>
                   <option value="3">Third Year</option>
-                  <option value="4">Fourth Year</option>
+                  <option value="4" disabled>Fourth Year</option>
 
 
                 </select>
@@ -346,7 +495,7 @@
                         <strong>Google Pay UPI ID</strong>
                       </label>
                       <div className={staffcss["upi-container"]}>
-                        <span>bijusasi9446@okaxis</span>
+                      <span>anjithbineesh@okhdfcbank</span>
                        
                         <img
                           src={upilogo}  // Replace with the actual path to your image
@@ -355,7 +504,7 @@
                         />
                         
                       </div>
-                      <span style={{ fontWeight: 'bold',fontSize: '18px' }}>GPay Number = 9446220354</span>
+                      <span style={{ fontWeight: 'bold', fontSize: '18px' }}>GPay Number = 8593844084</span>
 
                     </div>
 
@@ -377,7 +526,6 @@
                   <h3>Membership Fee Rules:</h3>
                   <ul>
                     <li>New Members: Rs. 50</li>
-                    <li>Renewal: Rs. 30</li>
                     <li>"For third-year students who are not yet IEDC members and wish to join, there will be an additional fine of Rs. 100."</li>
                     <li>"Fourth Years Only Renewal Is Permitted."</li>
 
@@ -402,3 +550,8 @@
 
         </section> 
       </div>
+
+  );
+}
+
+export default StudentSignupPage;
