@@ -14,8 +14,7 @@ export default function Discription() {
           to be untapped and IEDC aims to fill this abyss.
         </p>
         <button>More&nbsp;About&nbsp;Us</button>
-        <img src={event} alt="Event 1" id="img1" />
-        <img src={event} alt="Event 2" id="img2" />
+        
         <div id="quote">
           <h2>46+</h2>
           <span>Events In The Last Year</span>
