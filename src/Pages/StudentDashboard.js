@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Paper,
@@ -22,16 +22,16 @@ import {
   TableHead,
   TableRow,
   Alert,
-} from '@mui/material';
+} from "@mui/material";
 
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import EventIcon from '@mui/icons-material/Event';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings';
-import { auth, firestore } from '../firebaseConfig';
-import { useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx';
-import '../css/studentdashboard.css';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import EventIcon from "@mui/icons-material/Event";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { auth, firestore } from "../firebaseConfig";
+import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
+import "../css/studentdashboard.css";
 
 function StudentDashboard() {
   const navigate = useNavigate();
@@ -39,14 +39,14 @@ function StudentDashboard() {
   const [editMode, setEditMode] = useState(false);
   const [studentList] = useState([]);
   const [showUploadButton, setShowUploadButton] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [latestEvents, setLatestEvents] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [eventName, setEventName] = useState('');
-  const [eventDate, setEventDate] = useState('');
-  const [eventTime, setEventTime] = useState('');
-  const [eventVenue, setEventVenue] = useState('');
-  const [eventDesc, setEventDesc] = useState('');
+  const [eventName, setEventName] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [eventTime, setEventTime] = useState("");
+  const [eventVenue, setEventVenue] = useState("");
+  const [eventDesc, setEventDesc] = useState("");
   const [value, setValue] = useState(0);
   const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState(null);
@@ -55,7 +55,8 @@ function StudentDashboard() {
   const filteredStudentList = studentList.filter((student) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      (student.firstname && student.firstname.toLowerCase().includes(searchLower)) ||
+      (student.firstname &&
+        student.firstname.toLowerCase().includes(searchLower)) ||
       (student.year && student.year.toLowerCase().includes(searchLower)) ||
       (student.Branch && student.Branch.toLowerCase().includes(searchLower))
     );
@@ -66,24 +67,27 @@ function StudentDashboard() {
   };
 
   const [editedData, setEditedData] = useState({
-    gmail: '',
-    phone: '',
-    fatherphnumber: '',
-    motherphnumber: '',
-    year: '',
-    posts: '',
+    gmail: "",
+    phone: "",
+    fatherphnumber: "",
+    motherphnumber: "",
+    year: "",
+    posts: "",
   });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         try {
-          const userDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
+          const userDoc = await firestore
+            .collection("SNMIMT/USERS/2024-25/REV/STUDENTS")
+            .doc(user.uid)
+            .get();
           if (userDoc.exists) {
             const data = userDoc.data();
             setUserData(data);
-            localStorage.setItem('userData', JSON.stringify(data));
-            setIsAdmin(data.posts === 'CEO' || data.posts === 'CCO');
+            localStorage.setItem("userData", JSON.stringify(data));
+            setIsAdmin(data.posts === "CEO" || data.posts === "CCO");
           } else {
             setError("User data not found.");
           }
@@ -94,8 +98,8 @@ function StudentDashboard() {
           setIsLoading(false);
         }
       } else {
-        localStorage.removeItem('userData');
-        navigate('/login');
+        localStorage.removeItem("userData");
+        navigate("/login");
       }
     });
 
@@ -103,7 +107,7 @@ function StudentDashboard() {
   }, [navigate]);
 
   useEffect(() => {
-    if (userData && (userData.posts === 'CEO' || userData.posts === 'CCO')) {
+    if (userData && (userData.posts === "CEO" || userData.posts === "CCO")) {
       setShowUploadButton(true);
     } else {
       setShowUploadButton(false);
@@ -113,7 +117,10 @@ function StudentDashboard() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const eventsSnapshot = await firestore.collection('events').orderBy('timestamp', 'desc').get();
+        const eventsSnapshot = await firestore
+          .collection("events")
+          .orderBy("timestamp", "desc")
+          .get();
         const eventsData = eventsSnapshot.docs.map((doc) => doc.data());
         setLatestEvents(eventsData);
       } catch (error) {
@@ -129,8 +136,13 @@ function StudentDashboard() {
       try {
         const user = auth.currentUser;
         if (user) {
-          const notificationsSnapshot = await firestore.collection('notifications').where('recipientId', '==', user.uid).get();
-          const notificationsData = notificationsSnapshot.docs.map((doc) => doc.data());
+          const notificationsSnapshot = await firestore
+            .collection("notifications")
+            .where("recipientId", "==", user.uid)
+            .get();
+          const notificationsData = notificationsSnapshot.docs.map((doc) =>
+            doc.data()
+          );
           setNotifications(notificationsData);
         }
       } catch (error) {
@@ -144,8 +156,8 @@ function StudentDashboard() {
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      localStorage.removeItem('userData');
-      navigate('/login');
+      localStorage.removeItem("userData");
+      navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
       setError("Failed to log out. Please try again.");
@@ -168,8 +180,14 @@ function StudentDashboard() {
     try {
       const user = auth.currentUser;
       if (user) {
-        await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).update(editedData);
-        const updatedUserDoc = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').doc(user.uid).get();
+        await firestore
+          .collection("SNMIMT/USERS/2024-25/REV/STUDENTS")
+          .doc(user.uid)
+          .update(editedData);
+        const updatedUserDoc = await firestore
+          .collection("SNMIMT/USERS/2024-25/REV/STUDENTS")
+          .doc(user.uid)
+          .get();
         if (updatedUserDoc.exists) {
           setUserData(updatedUserDoc.data());
           setEditMode(false);
@@ -184,7 +202,7 @@ function StudentDashboard() {
     try {
       const user = auth.currentUser;
       if (user) {
-        await firestore.collection('SNMIMT/EVENTS').add({
+        await firestore.collection("SNMIMT/EVENTS").add({
           title: eventName,
           date: eventDate,
           description: eventDesc,
@@ -193,76 +211,82 @@ function StudentDashboard() {
           timestamp: new Date(),
           createdBy: user.uid,
         });
-        alert('Event created successfully!');
-        setEventName('');
-        setEventDate('');
-        setEventTime('');
-        setEventVenue('');
-        setEventDesc('');
+        alert("Event created successfully!");
+        setEventName("");
+        setEventDate("");
+        setEventTime("");
+        setEventVenue("");
+        setEventDesc("");
       }
     } catch (error) {
       console.error(error);
-      alert('Failed to create event. Please check the console for details.');
+      alert("Failed to create event. Please check the console for details.");
     }
   };
 
   const handleExport = async () => {
     try {
-      const studentsSnapshot = await firestore.collection('SNMIMT/USERS/2024-25/REV/STUDENTS').get();
+      const studentsSnapshot = await firestore
+        .collection("SNMIMT/USERS/2024-25/REV/STUDENTS")
+        .get();
       const studentsData = studentsSnapshot.docs.map((doc) => ({
         uid: doc.id,
         ...doc.data(),
       }));
 
       const formattedData = studentsData.map((student) => ({
-        'First Name': student.firstname,
-        'Last Name': student.lastname,
-        'Branch': student.Branch,
-        'Year': student.year,
-        'Dept': student.Branch,
-        'Phone Number': student.phone,
-        'Member Status': student.member,
-        'Payment Status': student.paymentScreenshotURL,
-        'Activity Points': student.activityPoints,
+        "First Name": student.firstname,
+        "Last Name": student.lastname,
+        Branch: student.Branch,
+        Year: student.year,
+        Dept: student.Branch,
+        "Phone Number": student.phone,
+        "Member Status": student.member,
+        "Payment Status": student.paymentScreenshotURL,
+        "Activity Points": student.activityPoints,
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(formattedData);
       const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Points');
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Activity Points");
 
-      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-      const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const blob = new Blob([excelBuffer], {
+        type: "application/octet-stream",
+      });
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = 'activity_points.xlsx';
+      link.download = "activity_points.xlsx";
       link.click();
     } catch (error) {
-      console.error('Failed to export data:', error);
-      alert('Failed to export data. Please check the console for details.');
+      console.error("Failed to export data:", error);
+      alert("Failed to export data. Please check the console for details.");
     }
   };
 
   if (isLoading) return <div>Loading...</div>;
-
-
 
   return (
     <Container maxWidth="lg">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4} lg={3}>
-            <Avatar sx={{ width: 80, height: 80, margin: 'auto' }}>
+            <Avatar sx={{ width: 80, height: 80, margin: "auto" }}>
               <AccountCircleIcon sx={{ fontSize: 60 }} />
             </Avatar>
             <Typography variant="h5" align="center" sx={{ marginTop: 2 }}>
-             Hai,{userData?.firstname || 'First Name'} {userData?.lastname || 'Last Name'}
+              Hai,{userData?.firstname || "First Name"}{" "}
+              {userData?.lastname || "Last Name"}
             </Typography>
             <Typography variant="body1" align="center" color="textSecondary">
-              {userData?.email || 'email@example.com'}
+              {userData?.email || "email@example.com"}
             </Typography>
             <Typography variant="body1" align="center" color="textSecondary">
-             Status: {userData?.posts || 'Member'}
+              Status: {userData?.posts || "Member"}
             </Typography>
             <Button
               fullWidth
@@ -299,7 +323,10 @@ function StudentDashboard() {
                         margin="normal"
                         value={editedData.gmail}
                         onChange={(e) =>
-                          setEditedData({ ...editedData, gmail: e.target.value })
+                          setEditedData({
+                            ...editedData,
+                            gmail: e.target.value,
+                          })
                         }
                       />
                       <TextField
@@ -308,7 +335,10 @@ function StudentDashboard() {
                         margin="normal"
                         value={editedData.phone}
                         onChange={(e) =>
-                          setEditedData({ ...editedData, phone: e.target.value })
+                          setEditedData({
+                            ...editedData,
+                            phone: e.target.value,
+                          })
                         }
                       />
                       <TextField
@@ -350,7 +380,10 @@ function StudentDashboard() {
                         margin="normal"
                         value={editedData.posts}
                         onChange={(e) =>
-                          setEditedData({ ...editedData, posts: e.target.value })
+                          setEditedData({
+                            ...editedData,
+                            posts: e.target.value,
+                          })
                         }
                       />
                       <Button
@@ -364,17 +397,27 @@ function StudentDashboard() {
                     </Box>
                   ) : (
                     <Box>
-                      <Typography variant="h6">Email: {userData?.gmail}</Typography>
-                      <Typography variant="h6">Phone: {userData?.phone}</Typography>
+                      <Typography variant="h6">
+                        Email: {userData?.gmail}
+                      </Typography>
+                      <Typography variant="h6">
+                        Phone: {userData?.phone}
+                      </Typography>
                       <Typography variant="h6">
                         Father's Phone: {userData?.fatherphnumber}
                       </Typography>
                       <Typography variant="h6">
                         Mother's Phone: {userData?.motherphnumber}
                       </Typography>
-                      <Typography variant="h6">Year: {userData?.year}</Typography>
-                      <Typography variant="h6">Branch: {userData?.Branch}</Typography>
-                      <Typography variant="h6">Posts: {userData?.posts}</Typography>
+                      <Typography variant="h6">
+                        Year: {userData?.year}
+                      </Typography>
+                      <Typography variant="h6">
+                        Branch: {userData?.Branch}
+                      </Typography>
+                      <Typography variant="h6">
+                        Posts: {userData?.posts}
+                      </Typography>
                       <Button
                         variant="contained"
                         color="primary"
@@ -493,14 +536,14 @@ function StudentDashboard() {
                   {isAdmin && (
                     <Box mt={3}>
                       {showUploadButton && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleExport}
-                    >
-                      Export Data
-                    </Button>
-                  )}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleExport}
+                        >
+                          Export Data
+                        </Button>
+                      )}
                       <Typography variant="h6" gutterBottom>
                         Student List
                       </Typography>
@@ -512,31 +555,30 @@ function StudentDashboard() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                       />
                       <TableContainer component={Paper}>
-  <Table>
-    <TableHead>
-      <TableRow>
-        <TableCell>First Name</TableCell>
-        <TableCell>Last Name</TableCell>
-        <TableCell>Year</TableCell>
-        <TableCell>Branch</TableCell>
-        <TableCell>Activity Points</TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {filteredStudentList.map((student, index) => (
-        <TableRow key={index}>
-          <TableCell>{student.firstname}</TableCell>
-          
-          <TableCell>{student.lastname}</TableCell>
-          <TableCell>{student.year}</TableCell>
-          <TableCell>{student.Branch}</TableCell>
-          <TableCell>{student.activityPoints}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>First Name</TableCell>
+                              <TableCell>Last Name</TableCell>
+                              <TableCell>Year</TableCell>
+                              <TableCell>Branch</TableCell>
+                              <TableCell>Activity Points</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {filteredStudentList.map((student, index) => (
+                              <TableRow key={index}>
+                                <TableCell>{student.firstname}</TableCell>
 
+                                <TableCell>{student.lastname}</TableCell>
+                                <TableCell>{student.year}</TableCell>
+                                <TableCell>{student.Branch}</TableCell>
+                                <TableCell>{student.activityPoints}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
                     </Box>
                   )}
                 </Box>
@@ -547,7 +589,6 @@ function StudentDashboard() {
       </Paper>
     </Container>
   );
-  
 }
 
 export default StudentDashboard;

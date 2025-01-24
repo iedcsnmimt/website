@@ -1,0 +1,85 @@
+/* Partners Section */
+.partners {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px; /* Added padding for spacing */
+  gap: 50px; /* Adjusted gap for better scaling */
+  max-width: 1200px; /* Limits the width of the container */
+  margin: 0 auto; /* Centers the container */
+  text-align: center;
+}
+
+.partners h1 {
+  font-weight: 500;
+  font-size: 6vw; /* Scales with viewport width */
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* Logo Section */
+.logo {
+  display: flex;
+  flex-wrap: wrap; /* Allows logos to wrap to the next row on smaller screens */
+  justify-content: center; /* Centers the logos horizontally */
+  gap: 30px; /* Adjusted gap for responsiveness */
+  width: 100%;
+}
+
+.logo img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 200px; /* Adjusted width for responsiveness */
+  height: 120px; /* Adjusted height for responsiveness */
+  background: #ffffff;
+  border-radius: 20px;
+  object-fit: contain; /* Ensures logos are properly displayed */
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .partners h1 {
+    font-size: 7vw;
+  }
+
+  .logo img {
+    width: 180px;
+    height: 100px;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .partners h1 {
+    font-size: 8vw;
+  }
+
+  .logo {
+    gap: 20px;
+  }
+
+  .logo img {
+    width: 150px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners h1 {
+    font-size: 10vw;
+  }
+
+  .logo {
+    gap: 15px;
+  }
+
+  .logo img {
+    width: 120px;
+    height: 70px;
+    padding: 10px;
+  }
+}

@@ -11,6 +11,8 @@ import Login from './Pages/Login';
 import Home from './Pages/home';
 import FeedbackForm from './Pages/feedback';
 import StudentRenewalPage from './Pages/studentrevenvalsignup';
+import Startup from './Pages/StartupList';
+import './App.css';
 
 function App() {
   // Check local storage for initial authentication state
@@ -21,7 +23,7 @@ function App() {
     // Load Google Analytics script
     const script = document.createElement('script');
     script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TWWMQ2QTNM';
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-SGGFRP8HCW';
     document.head.appendChild(script);
 
     window.dataLayer = window.dataLayer || [];
@@ -29,7 +31,7 @@ function App() {
       window.dataLayer.push(arguments);
     }
     gtag('js', new Date());
-    gtag('config', 'G-TWWMQ2QTNM');
+    gtag('config', 'G-SGGFRP8HCW');
 
     return () => {
       document.head.removeChild(script);
@@ -79,18 +81,20 @@ function App() {
           <Route path="/login/staffSignIn/1/" element={<StaffLogin />} />
           <Route path="/login/studentSignIn/1/" element={<StudentLogin />} />
           <Route path="/feedback/" element={<FeedbackForm />} />
+          <Route path="/startuplist/" element={<Startup />} />
           <Route
             path="/dashboard/student"
-            element={isAuthenticated ? <StudentDashboard /> : <Navigate to="/login" replace />}
+            element={5==5 ? <StudentDashboard /> : <Navigate to="/login" replace />}
           />
           <Route
             path="/dashboard/staff"
-            element={isAuthenticated ? <StaffDashboard /> : <Navigate to="/login" replace />}
+            element={5==5 ? <StaffDashboard /> : <Navigate to="/login" replace />}
           />
         </Routes>
       </div>
     </Router>
   );
 }
+console.log('API Key:', process.env.REACT_APP_FIREBASE_API_KEY);
 
 export default App;

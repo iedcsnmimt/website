@@ -1,0 +1,215 @@
+/* General Reset */
+body, h1, h2, p, button {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000; /* Assuming a dark theme */
+  color: #fff;
+}
+
+/* About Section */
+.About {
+  position: relative;
+  padding: 20px;
+}
+
+.About h1 {
+  font-weight: 600;
+  font-size: 4vw;
+  line-height: 1.2;
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.About p {
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #e7e7e7;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+.About button {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.2;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 30px;
+  background: #070148;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.About #img1,
+.About #img2 {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  background: linear-gradient(
+      0deg,
+      rgba(91, 33, 182, 0.19),
+      rgba(91, 33, 182, 0.19)
+    ),
+    url(../img/wall.jpg);
+  border-radius: 30px;
+  margin: 20px auto;
+}
+
+.About #quote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 40px rgba(91, 33, 182, 0.19);
+  border-radius: 30px;
+  text-align: center;
+  margin: 20px auto;
+  max-width: 250px;
+}
+
+.About #quote h2 {
+  font-weight: 500;
+  font-size: 2rem;
+  color: #111827;
+}
+
+.About #quote span {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #4b5563;
+}
+
+/* Vision Section */
+.Vision {
+  position: relative;
+  padding: 20px;
+}
+
+.Vision img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  background: url(../img/steve.png);
+  border-radius: 30px;
+  margin: 20px auto;
+}
+
+.Vision #quote {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 40px rgba(91, 33, 182, 0.19);
+  border-radius: 24px;
+  margin: 20px auto;
+  max-width: 450px;
+}
+
+.Vision #quote h2 {
+  color: #111827;
+  text-align: center;
+}
+
+.Vision h1 {
+  font-weight: 600;
+  font-size: 6vw;
+  line-height: 1.2;
+  color: #e7e7e7;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.Vision p {
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: #e7e7e7;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .About h1, .Vision h1 {
+    font-size: 5vw;
+  }
+
+  .About p, .Vision p {
+    font-size: 1.2rem;
+  }
+
+  .About button {
+    padding: 15px 20px;
+    font-size: 0.9rem;
+  }
+
+  .Vision img, .About #img1, .About #img2 {
+    max-width: 250px;
+  }
+
+  .About #quote, .Vision #quote {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .About h1, .Vision h1 {
+    font-size: 6vw;
+  }
+
+  .About p, .Vision p {
+    font-size: 1rem;
+  }
+
+  .About button {
+    padding: 10px 15px;
+    font-size: 0.8rem;
+  }
+
+  .Vision img, .About #img1, .About #img2 {
+    max-width: 200px;
+  }
+
+  .About #quote, .Vision #quote {
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .About h1, .Vision h1 {
+    font-size: 8vw;
+  }
+
+  .About p, .Vision p {
+    font-size: 0.9rem;
+  }
+
+  .About button {
+    padding: 8px 12px;
+    font-size: 0.7rem;
+  }
+
+  .Vision img, .About #img1, .About #img2 {
+    max-width: 150px;
+  }
+
+  .About #quote, .Vision #quote {
+    max-width: 150px;
+  }
+}

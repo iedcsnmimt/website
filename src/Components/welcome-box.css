@@ -1,0 +1,97 @@
+/* Base styles for responsiveness */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto; /* Ensures aspect ratio is maintained */
+}
+
+.welcome_box {
+  display: flex;
+  flex-wrap: wrap; /* Allows content to stack on smaller screens */
+  justify-content: center;
+  align-items: center; /* Centering vertically */
+  position: relative;
+  width: 90%; /* Responsive width */
+  max-width: 1220px;
+  margin: 2rem auto; /* Centered and less abrupt margin for smaller screens */
+  background: linear-gradient(
+    252.53deg,
+    rgba(91, 33, 182, 0.5) -0.87%,
+    rgba(179, 33, 182, 0.5) -0.87%,
+    rgba(32, 16, 52, 0.5) 25.15%,
+    rgba(14, 2, 33, 0.245) 97.92%
+  );
+  border-radius: 40px;
+}
+
+.welcome_box_data,
+.welcome_box_img {
+  flex: 1 1 50%; /* Responsive flex items */
+  display: flex;
+  flex-direction: column;
+  padding: 5%; /* Relative padding for consistency */
+  box-sizing: border-box; /* Ensures padding does not affect width */
+  text-align: center; /* Centered text for smaller screens */
+}
+
+.welcome_box_data h1 {
+  font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4rem); /* Scales with screen size */
+  line-height: 1.2; /* Improved line-height for better readability */
+  color: #ffffff;
+}
+
+.welcome_box_data p {
+  font-weight: 600;
+  font-size: clamp(1rem, 2.5vw, 1.125rem); /* Scales with screen size */
+  line-height: 1.5;
+  color: #ffffff;
+}
+
+.welcome_box_img img {
+  margin: auto;
+  padding: 1em;
+  filter: drop-shadow(0px 0px 1px #800080);
+  max-width: 100%; /* Ensures image stays within bounds */
+  height: auto; /* Maintains aspect ratio */
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .welcome_box {
+    flex-direction: column; /* Stack items on top of each other */
+  }
+
+  .welcome_box_data,
+  .welcome_box_img {
+    flex: 1 1 100%; /* Full width for smaller screens */
+    padding: 2rem; /* Adjusted padding */
+  }
+
+  .welcome_box_data h1 {
+    font-size: 2.5rem; /* Smaller headings for mid-sized screens */
+  }
+
+  .welcome_box_data p {
+    font-size: 1rem; /* Smaller font size for paragraphs */
+  }
+}
+
+@media (max-width: 576px) {
+  .welcome_box_data,
+  .welcome_box_img {
+    padding: 1.5rem; /* Further reduced padding */
+  }
+
+  .welcome_box_data h1 {
+    font-size: 2rem; /* Adjust heading size for smaller screens */
+  }
+
+  .welcome_box_data p {
+    font-size: 0.9rem; /* Smaller paragraph font */
+  }
+
+  img {
+    max-width: 90%; /* Prevents images from overflowing */
+  }
+}

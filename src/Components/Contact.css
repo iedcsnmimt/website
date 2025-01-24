@@ -1,0 +1,121 @@
+/* Contact Section */
+.contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+  gap: 20px;
+  max-width: 90%;
+  margin: 0 auto;
+  background: #0c0c0c;
+  border-radius: 30px;
+  box-sizing: border-box;
+}
+
+.contact h1 {
+  font-weight: 600;
+  font-size: 2.5rem; /* Scalable font size */
+  line-height: 1.2;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.contact #line {
+  width: 1px;
+  height: 100px;
+  background-color: #ffffff;
+  margin: 20px auto;
+}
+
+.contact #title,
+.contact #heading {
+  font-size: 1.2rem; /* Scalable font size */
+  color: #ffffff;
+  margin: 10px 0;
+}
+
+.contact p {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* Form Section */
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  gap: 15px;
+}
+
+/* Social Icons Section */
+.social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+  gap: 20px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .contact h1 {
+    font-size: 2rem;
+  }
+
+  .contact p {
+    font-size: 0.9rem;
+  }
+
+  .form {
+    max-width: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact {
+    padding: 20px 10px;
+    border-radius: 20px;
+  }
+
+  .contact h1 {
+    font-size: 1.8rem;
+  }
+
+  .contact p {
+    font-size: 0.85rem;
+  }
+
+  .form {
+    max-width: 100%;
+  }
+
+  .social {
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact h1 {
+    font-size: 1.5rem;
+  }
+
+  .contact p {
+    font-size: 0.8rem;
+  }
+
+  .social {
+    flex-direction: column; /* Stack social icons vertically on very small screens */
+    gap: 10px;
+  }
+}

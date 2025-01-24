@@ -1,0 +1,461 @@
+/* General Styles */
+.startup-container {
+  font-family: 'Roboto', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #e0e0e0;
+  background-color: #121212;
+}
+
+/* Page Title */
+.title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #00e676;
+}
+
+/* IEDC Section */
+.iedc-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.iedc-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.iedc-content {
+  flex: 1;
+}
+
+.iedc-title {
+  font-size: 1.8rem;
+  color: #00e676;
+  margin: 0 0 10px;
+}
+
+.iedc-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #bdbdbd;
+}
+
+/* Card Styles */
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ensure columns are responsive */
+  gap: 20px;
+}
+
+.card {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  gap: 30px; 
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-direction: column; /* Align items vertically */
+  justify-content: space-between; /* Ensure consistent card height */
+  min-height: 300px; /* Set a minimum height to maintain card size */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.75);
+}
+
+.startup-logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+  display: block;
+  border-radius: 50%;
+  background-color: #333;
+}
+
+.card-content h2 {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #00e676;
+}
+
+.card-content p {
+  font-size: 0.9rem;
+  text-align: center;
+  color: #bdbdbd;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow: hidden; /* Prevent content overflow outside the viewport */
+}
+
+.modal-content {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 900px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+  position: relative;
+  color: #e0e0e0;
+  max-height: 90vh; /* Ensure the modal fits the viewport */
+  overflow-y: auto; /* Enable scrolling for overflowing content */
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  color: #00e676;
+  margin-bottom: 20px;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #bdbdbd;
+}
+
+.modal-content .expanded-logo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #333;
+  margin-bottom: 20px;
+  flex-shrink: 0; /* Ensure the logo doesn't shrink on smaller screens */
+}
+
+.website-link {
+  display: block;
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #00e676;
+  text-decoration: none;
+  text-align: center;
+}
+
+.website-link:hover {
+  text-decoration: underline;
+}
+
+.search-bar input {
+  width: 60%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+.search-bar input::placeholder {
+  color: #888;
+}
+/* Desktop Layout: Side-by-Side */
+@media (min-width: 768px) {
+  .modal-content {
+    flex-direction: row; /* Side-by-side layout for large screens */
+    gap: 30px;
+    padding: 30px;
+  }
+
+  .modal-content .expanded-logo {
+    flex: 0 0 150px; /* Fixed size for the logo */
+    margin: 0;
+    align-self: center;
+  }
+
+  .modal-content-text {
+    flex: 1; /* Text content fills the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .modal-content h2 {
+    text-align: left;
+  }
+
+  .website-link {
+    text-align: left;
+  }
+}
+
+/* Mobile Layout: Stacked Content */
+@media (max-width: 768px) {
+  .modal-content {
+    flex-direction: column; /* Stack content vertically on smaller screens */
+    padding: 20px;
+  }
+
+  .modal-content .expanded-logo {
+    margin: 0 auto 20px;
+  }
+
+  .modal-content h2 {
+    text-align: center;
+  }
+
+  .website-link {
+    text-align: center;
+  }
+}
+
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Card Logo Wrapper */
+.logo-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.startup-logo {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 50%;
+  background-color: #333;
+}
+
+/* Badge Styles */
+.badge-container {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.badge {
+  background: #00e676;
+  color: #121212;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 3px 6px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Individual Badge Colors */
+.msme-badge {
+  background-color: #ff9800;
+}
+
+.beta-badge {
+  background-color: #3f51b5;
+}
+
+.pvt-badge {
+  background-color: #4caf50;
+}
+
+.llp-badge {
+  background-color: #2196f3;
+}
+
+.opc-badge {
+  background-color: #f44336;
+}
+/* Search Bar */
+.search-bar {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.search-bar input {
+  width: 60%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #333;
+  border-radius: 5px;
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.search-bar input::placeholder {
+  color: #888;
+}
+
+/* About Beta Section */
+.about-beta {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  color: #e0e0e0;
+}
+
+.about-beta h2 {
+  color: #00e676;
+}
+
+.about-beta a {
+  color: #00e676;
+  text-decoration: none;
+}
+
+.about-beta a:hover {
+  text-decoration: underline;
+}
+
+blockquote {
+  margin: 10px 0;
+  padding-left: 20px;
+  border-left: 5px solid #00e676;
+  font-style: italic;
+  color: #bdbdbd;
+}
+/* Team Section */
+.team-section {
+  background-color: #121212;
+  padding: 40px 20px;
+  color: #e0e0e0;
+}
+
+.team-title {
+  text-align: center;
+  font-size: 2rem;
+  color: #00e676;
+  margin-bottom: 30px;
+}
+
+.team-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid layout */
+  gap: 30px;
+}
+
+.team-member {
+  background: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-member:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.75);
+}
+
+.team-member img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.team-member h3 {
+  font-size: 1.3rem;
+  color: #00e676;
+  margin-bottom: 10px;
+}
+
+.team-member p {
+  font-size: 1rem;
+  color: #bdbdbd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .team-title {
+    font-size: 1.8rem;
+  }
+
+  .team-member h3 {
+    font-size: 1.2rem;
+  }
+
+  .team-member p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-title {
+    font-size: 1.5rem;
+  }
+
+  .team-member h3 {
+    font-size: 1rem;
+  }
+
+  .team-member p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .iedc-section {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .iedc-logo {
+    margin-bottom: 20px;
+  }
+
+  .search-bar input {
+    width: 90%;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .card-content h2 {
+    font-size: 1rem;
+  }
+
+  .card-content p {
+    font-size: 0.8rem;
+  }
+}

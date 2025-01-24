@@ -1,10 +1,47 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #ffffff; /* White background */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
 .App {
   text-align: center;
+  min-height: 100vh; /* Ensures full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space out header, content, and footer */
+  background-color: #ffffff; /* White background for the entire app */
+  padding: 0;
+  box-sizing: border-box; /* Include padding in element dimensions */
+}
+
+/* Sticky Top Header */
+.App-header {
+  width: 100%;
+  background-color: #ffffff; /* White background for the header */
+  position: sticky; /* Make the header stick to the top */
+  top: 0; /* Stick at the very top */
+  z-index: 10; /* Ensure it stays above other elements */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for elevation */
+  padding: 1.5rem; /* Add padding for spacing */
+  font-size: calc(10px + 2vmin); /* Dynamic font size */
+  color: #333;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+  max-width: 100%; /* Prevents the logo from overflowing */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,26 +50,78 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* App Content */
+.App-content {
+  flex: 1; /* Ensures content grows to fill available space */
+  padding: 2rem; /* Adds spacing for content */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
+/* App Footer (Sticky Bottom Footer) */
+.App-footer {
+  width: 100%;
+  padding: 1rem;
+  background-color: #ffffff; /* White footer background */
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for footer */
+}
+
+/* Links */
 .App-link {
-  color: #61dafb;
+  color: #61dafb; /* React blue for links */
+  font-size: 1rem; /* Base font size for links */
+  text-decoration: none;
+  transition: color 0.3s ease; /* Smooth color transition on hover */
 }
 
+.App-link:hover {
+  color: #21a1f1; /* Slightly darker blue for hover state */
+}
+
+/* Keyframes for logo spin */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .App-header {
+    font-size: calc(10px + 3vmin); /* Adjust font size for tablets */
+    padding: 1rem;
+  }
+
+  .App-logo {
+    height: 50vmin; /* Resize logo for tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header {
+    font-size: calc(12px + 2vmin); /* Smaller font size for small screens */
+    padding: 0.8rem;
+  }
+
+  .App-logo {
+    height: 60vmin; /* Further reduce logo size */
+  }
+
+  .App-link {
+    font-size: 0.9rem; /* Adjust link font size for small screens */
+  }
+
+  .App-footer {
+    font-size: 0.8rem; /* Smaller footer text */
   }
 }

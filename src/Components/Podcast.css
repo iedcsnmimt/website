@@ -1,0 +1,60 @@
+/* Podcast Section */
+.podcast {
+  position: relative;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+.podcast h1 {
+  font-weight: 600;
+  font-size: 5vw; /* Scales with viewport width */
+  line-height: 1.5;
+  color: #e7e7e7;
+  margin-bottom: 30px;
+}
+
+/* Player Section */
+.player {
+  width: 90%; /* Scales with screen size */
+  max-width: 1200px; /* Limits max width */
+  height: auto; /* Adapts height to content */
+  margin: 0 auto; /* Centers horizontally */
+  background: #111; /* Example background color */
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .podcast h1 {
+    font-size: 6vw;
+  }
+
+  .player {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .podcast h1 {
+    font-size: 7vw;
+  }
+
+  .player {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .podcast h1 {
+    font-size: 8vw;
+  }
+
+  .player {
+    padding: 10px;
+  }
+}

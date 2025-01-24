@@ -23,11 +23,12 @@
 .content {
   z-index: 1;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 15px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
+  box-sizing: border-box; /* Ensure padding doesn't overflow the container */
 }
 
 .title {
@@ -59,4 +60,65 @@
 
 .MuiAlert-root {
   margin-top: 16px;
+}
+
+/* Media Queries for Responsiveness */
+
+/* When the screen width is smaller than 768px (tablets and mobile devices) */
+@media (max-width: 768px) {
+  .student-login-container {
+    padding: 10px;
+    height: auto; /* Allow for height to adjust based on content */
+  }
+
+  .content {
+    max-width: 100%; /* Let the content take up more space on smaller devices */
+    margin: 0 10px; /* Add some margin on the sides for better spacing */
+  }
+
+  .title {
+    font-size: 1.25rem; /* Make the title smaller for smaller screens */
+  }
+
+  .form {
+    gap: 10px; /* Reduce the gap between form elements */
+  }
+
+  .MuiTextField-root .MuiOutlinedInput-root {
+    font-size: 0.875rem; /* Adjust font size of inputs for smaller screens */
+  }
+
+  .MuiButton-root {
+    padding: 8px 0; /* Adjust button padding for smaller screens */
+    font-size: 0.875rem; /* Reduce font size of the button */
+  }
+}
+
+/* When the screen width is smaller than 480px (very small mobile devices) */
+@media (max-width: 480px) {
+  .student-login-container {
+    padding: 5px;
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 15px; /* Add more padding for very small screens */
+  }
+
+  .title {
+    font-size: 1.125rem; /* Make the title slightly smaller */
+  }
+
+  .form {
+    gap: 8px; /* Even smaller gap between form elements */
+  }
+
+  .MuiTextField-root .MuiOutlinedInput-root {
+    font-size: 0.75rem; /* Further reduce font size of inputs */
+  }
+
+  .MuiButton-root {
+    padding: 8px 0; /* Adjust button padding for very small screens */
+    font-size: 0.875rem; /* Adjust font size for small screens */
+  }
 }

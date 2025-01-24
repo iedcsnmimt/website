@@ -1,0 +1,184 @@
+/* General Styles */
+.about-beta {
+  font-family: 'Roboto', sans-serif;
+  color: #e0e0e0;
+  background-color: #121212;
+  padding: 50px 20px;
+  border-radius: 15px;
+  max-width: 1000px;
+  margin: 40px auto;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.8);
+  animation: fadeIn 1.5s ease-in-out;
+  overflow: hidden; /* Prevent content overflow */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Page Title */
+.title {
+  font-size: 3rem;
+  text-align: center;
+  color: #00e676;
+  margin-bottom: 30px;
+  text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+  animation: slideIn 1s ease-out;
+}
+
+/* Description */
+.description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  text-align: center;
+  margin: 20px 0;
+  color: #bdbdbd;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInText 2s ease-in-out;
+}
+
+/* Button Styles */
+.btn-startup-list {
+  display: block;
+  width: 250px;
+  height: 50px;
+  margin: 30px;
+  padding: 15px;
+  background-color: #00e676;
+  color: #121212;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.btn-startup-list:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 12px 18px rgba(0, 0, 0, 0.75);
+  background-color: #00c853;
+  animation: bounce 0.5s infinite alternate;
+}
+
+.btn-startup-list:active {
+  transform: translateY(2px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide-in Animation for Title */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Text Fade-in Animation */
+@keyframes fadeInText {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Bounce Button Animation */
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .about-beta {
+    padding: 40px 20px;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .btn-startup-list {
+    width: 220px;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-beta {
+    padding: 30px 15px;
+    max-width: 90%;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .btn-startup-list {
+    width: 100%;
+    font-size: 1.2rem;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-beta {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .btn-startup-list {
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 10px;
+  }
+}

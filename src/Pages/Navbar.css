@@ -1,0 +1,54 @@
+/* Navbar with Light Theme - White Background and White Text */
+.nav {
+  
+    color: #333; /* Dark text for visibility */
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .nav__menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .nav__list {
+    list-style: none;
+    display: flex;
+  }
+  
+  .nav__item {
+    margin-right: 20px;
+  }
+  
+  .nav__link {
+    text-decoration: none;
+    color: #333; /* Dark text color */
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  .nav__link:hover {
+    color: #007bff; /* Highlight color on hover */
+  }
+  
+  .nav__link.active {
+    color: #007bff; /* Active link color */
+  }
+  
+  /* Optional: Style the Login link if needed */
+  .nav a {
+    color: #007bff; /* Blue color for login link */
+  }
+  
+  .nav a:hover {
+    color: #0056b3;
+  }
+  
