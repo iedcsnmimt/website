@@ -52,8 +52,8 @@ function Navbar() {
           </li>
 
           <li className="nav__item">
-          <a href="https://lookerstudio.google.com/reporting/d9cc84d5-dcad-44a3-bccb-dd226a9d3da4" className="nav__link" target="_blank" rel="noopener noreferrer">
-  Lead's Scores Board
+          <a href="https://astra2025.vercel.app/" className="nav__link" target="_blank" rel="noopener noreferrer">
+  Astra 2025
 </a>
 
           </li>
